@@ -38,3 +38,325 @@ Traceback (most recent call last):
 OSError: [Errno 22] Invalid argument
 2024-12-05 08:47:18,068 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
 2024-12-05 08:47:18,068 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:50:26,629 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:26,630 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:50:26,789 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:26,791 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:50:26,882 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:26,884 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:50:28,881 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,102 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,166 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,619 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,620 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,632 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,634 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,634 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,635 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:50:29,637 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:50:29,638 - src.server - ERROR - [server.py:42] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'callback'
+2024-12-05 08:50:29,639 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:50:29,808 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,810 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,820 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,821 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,823 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,824 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:50:29,826 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:50:29,826 - src.server - ERROR - [server.py:42] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'callback'
+2024-12-05 08:50:29,827 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:50:29,862 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:29,863 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,871 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,872 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,873 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:29,873 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:50:29,874 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:50:29,875 - src.server - ERROR - [server.py:42] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'callback'
+2024-12-05 08:50:29,875 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:50:42,396 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:42,397 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:50:44,257 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:44,955 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:50:44,958 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:44,969 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:44,971 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:44,972 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:50:44,972 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:50:44,975 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:50:44,976 - src.server - ERROR - [server.py:42] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'callback'
+2024-12-05 08:50:44,977 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:51:16,908 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:51:16,909 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:51:16,969 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:51:16,970 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:51:16,972 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:51:18,300 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:18,302 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:51:18,328 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:18,329 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:51:20,469 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:20,498 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:21,139 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:21,141 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,150 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,151 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,152 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,152 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:51:21,155 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:51:21,156 - src.server - ERROR - [server.py:43] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'channel'
+2024-12-05 08:51:21,157 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:51:21,175 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:21,177 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,195 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,196 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,197 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:21,198 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:51:21,200 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:51:21,202 - src.server - ERROR - [server.py:43] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'channel'
+2024-12-05 08:51:21,203 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:51:26,964 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:51:26,965 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:51:26,966 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:51:27,025 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:51:27,026 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:51:27,028 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:51:28,276 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:28,277 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:51:28,342 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:28,343 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:51:30,297 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:30,322 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:31,002 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:31,004 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,012 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,012 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,013 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,013 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:51:31,015 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:51:31,015 - src.server - ERROR - [server.py:43] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'channel'
+2024-12-05 08:51:31,016 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:51:31,023 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:31,024 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,034 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,035 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,035 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:31,036 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:51:31,037 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:51:31,037 - src.server - ERROR - [server.py:43] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'channel'
+2024-12-05 08:51:31,038 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:51:41,005 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:41,006 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:51:42,935 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:43,584 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:51:43,586 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:43,594 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:43,595 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:43,596 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:51:43,596 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:51:43,598 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:51:43,598 - src.server - ERROR - [server.py:43] - Error subscribing to message bus: MessageBus.subscribe() missing 1 required positional argument: 'channel'
+2024-12-05 08:51:43,599 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:53:17,624 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:53:17,624 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:53:17,625 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:53:17,626 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:53:17,628 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:53:17,627 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:53:17,704 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:53:17,705 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:53:17,707 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:53:19,032 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:19,033 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:53:19,038 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:19,040 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:53:19,093 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:19,094 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:53:21,381 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:21,382 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:21,394 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:22,053 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:22,054 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:22,055 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,056 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,063 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:53:22,064 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,065 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,065 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,065 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,065 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,066 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,066 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:53:22,066 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,067 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:53:22,067 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:53:22,068 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:53:22,068 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:53:22,068 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:53:22,069 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:53:22,069 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:53:22,074 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,074 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,075 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:53:22,075 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:53:22,077 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:53:22,077 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:53:22,078 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:54:39,983 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:54:39,983 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:54:39,984 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:54:39,984 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:54:39,985 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:54:39,986 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:54:41,201 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:41,202 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:54:41,203 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:41,204 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:54:41,208 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:41,209 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:54:43,284 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,287 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,289 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,934 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,936 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,936 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,938 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,940 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:54:43,942 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,946 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,946 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,947 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,947 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,947 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:54:43,948 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,948 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,950 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:54:43,950 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:54:43,950 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:54:43,951 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 08:54:43,951 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:54:43,951 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:54:43,952 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 08:54:43,953 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,953 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,954 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:54:43,954 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:54:43,955 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:54:43,956 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:54:43,956 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 08:55:07,346 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:55:07,347 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:55:09,508 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:55:10,373 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:55:10,376 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:55:10,386 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:55:10,387 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:55:10,389 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 08:55:10,391 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:55:10,393 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 08:55:10,395 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 08:55:10,396 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus

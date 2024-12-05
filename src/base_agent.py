@@ -234,19 +234,30 @@ class BaseAgent(ABC):
 
             if self.llm_config:
                 try:
-                    thought = await self.llm_config.generate_text(
-                        f"As {self.role}, analyze the current situation and share your thoughts."
-                    )
-                    if thought:
+                    # More robust thought generation for local model
+                    thought_prompt = f"""
+                    You are a {self.role} agent in a trading system. 
+                    Provide a concise, professional thought process that:
+                    1. Reflects on current market conditions
+                    2. Identifies key strategic insights
+                    3. Suggests potential actions
+                    
+                    Your response should be clear, actionable, and focused.
+                    """
+                    
+                    thought = await self.llm_config.generate_text(thought_prompt)
+                    
+                    if thought and len(thought.strip()) > 10:
                         return thought.strip()
-                except Exception as e:
-                    if "rate limit" in str(e).lower():
-                        logger.warning(f"Rate limit hit for {self.name}, using fallback thought")
                     else:
-                        logger.error(f"Error generating thought for {self.name}: {e}")
+                        return f"{self.role} is analyzing current market dynamics."
+
+                except Exception as e:
+                    logger.warning(f"Error generating thought for {self.name}: {e}")
+                    return f"{self.role} is processing market information..."
             
-            # Fallback thought if LLM fails or is rate limited
-            return f"{self.role} is analyzing market conditions..."
+            # Fallback thought if LLM fails
+            return f"{self.role} is assessing market conditions."
 
         except Exception as e:
             logger.error(f"Unexpected error in thought generation for {self.name}: {e}")

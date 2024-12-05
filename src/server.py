@@ -6,10 +6,10 @@ import json
 import asyncio
 from typing import Dict
 import logging
-from message_bus import message_bus
-from trading_system import TradingSystem
+from src.message_bus import message_bus
+from src.trading_system import TradingSystem
 from datetime import datetime
-from logging_config import setup_logging
+from src.logging_config import setup_logging
 
 # Initialize logging
 setup_logging()
@@ -36,7 +36,8 @@ class ConnectionManager:
     async def _subscribe_to_message_bus(self):
         try:
             logger.info("ConnectionManager subscribing to message bus")
-            await message_bus.subscribe(self._handle_message)
+            # Subscribe to UI channel with the _handle_message method
+            await message_bus.subscribe(callback=self._handle_message, channel='ui')
             logger.info("Successfully subscribed to message bus")
         except Exception as e:
             logger.error(f"Error subscribing to message bus: {e}")
@@ -80,6 +81,7 @@ class ConnectionManager:
     async def _handle_message(self, message: dict):
         try:
             logger.debug(f"Handling message from bus: {message}")
+            # Broadcast all messages from the bus to WebSocket clients
             await self.broadcast(message)
         except Exception as e:
             logger.error(f"Error handling message from bus: {e}")
