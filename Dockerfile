@@ -10,20 +10,23 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV POETRY_HOME=/opt/poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    cd /usr/local/bin && \
+    ln -s /opt/poetry/bin/poetry && \
+    poetry config virtualenvs.create false
 
 # Copy project files
 COPY pyproject.toml poetry.lock ./
+
+# Install dependencies
+RUN poetry install --only main
+
+# Copy source code and README
 COPY src/ ./src/
 COPY README.md ./
 
-# Configure Poetry
-RUN poetry config virtualenvs.create false
-
-# Install dependencies
-RUN poetry install --no-dev
-
-# Environment variables will be provided at runtime
+# Environment variables will be provided at runtime through docker-compose
 ENV OPENAI_API_KEY=""
 ENV ALPACA_API_KEY=""
 ENV ALPACA_SECRET_KEY=""
