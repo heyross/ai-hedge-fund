@@ -202,11 +202,11 @@ function updateAgentThought(agentRole, thoughtContent) {
         
         // Add animation and limit number of thoughts
         thoughtElement.classList.add('fade-in');
-        thoughtContainer.insertBefore(thoughtElement, thoughtContainer.firstChild);
+        thoughtContainer.appendChild(thoughtElement);
         
         // Limit to last 5 thoughts
-        if (thoughtContainer.children.length > 5) {
-            thoughtContainer.removeChild(thoughtContainer.lastChild);
+        while (thoughtContainer.children.length > 6) {
+            thoughtContainer.removeChild(thoughtContainer.children[1]);
         }
     }
 }
