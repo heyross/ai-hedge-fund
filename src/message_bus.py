@@ -34,17 +34,22 @@ class MessageBus:
         logger.debug(f"Publishing message: {message}")
         await self.message_queue.put(message)
 
-    async def subscribe(self, channel: str, callback: Callable):
+    async def subscribe(self, callback: Callable, channel: str = 'ui'):
         """
         Subscribe to a specific channel
         Normalize channel name to match predefined channels
+        
+        Args:
+            callback (Callable): The callback function to handle messages
+            channel (str, optional): The channel to subscribe to. Defaults to 'ui'.
         """
         # Normalize channel names
         normalized_channel = self._normalize_channel(channel)
         
         if normalized_channel not in self.subscribers:
             logger.warning(f"Unknown channel: {normalized_channel}")
-            return
+            # Add the channel if it doesn't exist
+            self.subscribers[normalized_channel] = []
         
         self.subscribers[normalized_channel].append(callback)
         logger.debug(f"Added subscriber for {normalized_channel}. Total subscribers: {len(self.subscribers[normalized_channel])}")
