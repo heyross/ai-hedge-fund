@@ -11,15 +11,15 @@ logger = logging.getLogger(__name__)
 
 class MessageBus:
     def __init__(self):
-        self.subscribers: Dict[str, List[Callable[[dict], Awaitable[None]]]] = {
-            "market_data": [],
-            "quantitative": [],
-            "risk_management": [],
-            "portfolio_management": [],
-            "ui": []
+        self.subscribers: Dict[str, List[Callable]] = {
+            'market_data': [],
+            'quantitative': [],
+            'risk_management': [],
+            'portfolio_management': [],
+            'ui': []
         }
+        self.message_queue: asyncio.Queue = asyncio.Queue()
         self._running = False
-        self.message_queue = asyncio.Queue()
         logger.info("MessageBus initialized")
 
     async def publish(self, sender: str, message_type: str, content: Any, private: bool = False):
@@ -34,13 +34,33 @@ class MessageBus:
         logger.debug(f"Publishing message: {message}")
         await self.message_queue.put(message)
 
-    async def subscribe(self, agent_type: str, callback: Callable[[dict], Awaitable[None]]):
-        """Subscribe to messages"""
-        if agent_type in self.subscribers:
-            self.subscribers[agent_type].append(callback)
-            logger.debug(f"Added subscriber for {agent_type}. Total subscribers: {len(self.subscribers[agent_type])}")
-        else:
-            logger.warning(f"Unknown agent type: {agent_type}")
+    async def subscribe(self, channel: str, callback: Callable):
+        """
+        Subscribe to a specific channel
+        Normalize channel name to match predefined channels
+        """
+        # Normalize channel names
+        normalized_channel = self._normalize_channel(channel)
+        
+        if normalized_channel not in self.subscribers:
+            logger.warning(f"Unknown channel: {normalized_channel}")
+            return
+        
+        self.subscribers[normalized_channel].append(callback)
+        logger.debug(f"Added subscriber for {normalized_channel}. Total subscribers: {len(self.subscribers[normalized_channel])}")
+
+    def _normalize_channel(self, channel: str) -> str:
+        """
+        Normalize channel names to match predefined channels
+        """
+        channel = channel.lower().replace(' ', '').replace('agent', '')
+        channel_map = {
+            'marketdata': 'market_data',
+            'quantitative': 'quantitative',
+            'riskmanagement': 'risk_management',
+            'portfoliomanagement': 'portfolio_management'
+        }
+        return channel_map.get(channel, channel)
 
     async def start(self):
         """Start processing messages"""
@@ -80,7 +100,7 @@ class MessageBus:
             except Exception as e:
                 logger.error(f"Error processing message: {e}", exc_info=True)
 
-    async def _safe_callback(self, callback: Callable[[dict], Awaitable[None]], message: dict):
+    async def _safe_callback(self, callback: Callable, message: dict):
         """Safely execute a callback with error handling"""
         try:
             await callback(message)

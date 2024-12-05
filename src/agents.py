@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 class MarketDataAgent(BaseAgent):
     def __init__(self, user_name=None):
-        super().__init__("Market Data Agent", "market_data", user_name)
+        super().__init__(name="Market Data Agent", user_name=user_name)
         self.last_update = 0
         self.update_interval = 300  # 5 minutes
         # Set default values
-        self.state = {
+        self.market_data = {
             "ticker": "AAPL",
             "start_date": "2023-01-01",
             "end_date": "2023-12-31"
@@ -39,9 +39,9 @@ class MarketDataAgent(BaseAgent):
 
         try:
             await self.broadcast_thought("Fetching market data...")
-            prices = get_prices(self.state.get("ticker", "AAPL"), 
-                              self.state.get("start_date"),
-                              self.state.get("end_date"))
+            prices = get_prices(self.market_data.get("ticker", "AAPL"), 
+                              self.market_data.get("start_date"),
+                              self.market_data.get("end_date"))
             
             if prices is not None:
                 # Convert the DataFrame to a format that can be serialized
@@ -67,16 +67,16 @@ class MarketDataAgent(BaseAgent):
             content = message["content"]
             await self.broadcast_message({
                 "type": "agent_message",
-                "content": f"I am the Market Data Agent. I'll fetch data for {self.state['ticker']} from {self.state['start_date']} to {self.state['end_date']}"
+                "content": f"I am the Market Data Agent. I'll fetch data for {self.market_data['ticker']} from {self.market_data['start_date']} to {self.market_data['end_date']}"
             })
             
             if isinstance(content, dict) and "ticker" in content:
-                self.state["ticker"] = content["ticker"]
+                self.market_data["ticker"] = content["ticker"]
                 self.last_update = 0  # Force update on ticker change
 
 class QuantitativeAgent(BaseAgent):
     def __init__(self, user_name=None):
-        super().__init__("Quantitative Agent", "quantitative", user_name)
+        super().__init__(name="Quantitative Agent", user_name=user_name)
         self.last_analysis = 0
         self.analysis_interval = 300  # Analyze every 5 minutes
 
@@ -174,7 +174,7 @@ class QuantitativeAgent(BaseAgent):
 
 class RiskManagementAgent(BaseAgent):
     def __init__(self, user_name=None):
-        super().__init__("Risk Management Agent", "risk_management", user_name)
+        super().__init__(name="Risk Management Agent", user_name=user_name)
         self.last_assessment = 0
         self.assessment_interval = 300  # Assess every 5 minutes
 
@@ -239,7 +239,7 @@ class RiskManagementAgent(BaseAgent):
 
 class PortfolioManagementAgent(BaseAgent):
     def __init__(self, user_name=None):
-        super().__init__("Portfolio Management Agent", "portfolio_management", user_name)
+        super().__init__(name="Portfolio Management Agent", user_name=user_name)
         self.last_decision = 0
         self.decision_interval = 300  # Make decisions every 5 minutes
 
