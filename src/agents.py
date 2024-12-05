@@ -5,8 +5,10 @@ from datetime import datetime
 from src.base_agent import BaseAgent
 from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
 from langchain_openai.chat_models import ChatOpenAI
+from langgraph.graph import StateGraph
 import time
 import json
+import argparse
 
 logger = logging.getLogger(__name__)
 
