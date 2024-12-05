@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 import json
 import asyncio
-from typing import Dict, Set
+from typing import Dict
 import logging
 from src.message_bus import message_bus
 from src.trading_system import TradingSystem
@@ -28,23 +28,31 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict[str, WebSocket] = {}
         self.system_running = False
-        
+        # Subscribe to message bus on initialization
+        asyncio.create_task(self._subscribe_to_message_bus())
+
+    async def _subscribe_to_message_bus(self):
+        await message_bus.subscribe("ui", self._handle_message)
+        logger.info("ConnectionManager subscribed to message bus")
+
     async def connect(self, websocket: WebSocket, client_id: str):
         await websocket.accept()
         self.active_connections[client_id] = websocket
-        # Subscribe to message bus
-        await message_bus.subscribe("ui", self._handle_message)
-        
+        logger.info(f"Client {client_id} connected")
+
     def disconnect(self, client_id: str):
-        self.active_connections.pop(client_id, None)
-        
+        if client_id in self.active_connections:
+            del self.active_connections[client_id]
+            logger.info(f"Client {client_id} disconnected")
+
     async def broadcast(self, message: dict):
+        logger.debug(f"Broadcasting message: {message}")
         for connection in self.active_connections.values():
             try:
                 await connection.send_json(message)
             except Exception as e:
                 logger.error(f"Error broadcasting message: {e}")
-                
+
     async def send_private(self, client_id: str, message: dict):
         if client_id in self.active_connections:
             try:
@@ -54,18 +62,9 @@ class ConnectionManager:
 
     async def _handle_message(self, message: dict):
         """Handle messages from the message bus"""
-        try:
-            await self.broadcast({
-                "type": message["type"],
-                "data": {
-                    "sender": message["sender"],
-                    "content": message["content"],
-                    "timestamp": message["timestamp"],
-                    "private": message["private"]
-                }
-            })
-        except Exception as e:
-            logger.error(f"Error handling message bus message: {e}")
+        logger.debug(f"Received message from bus: {message}")
+        # Forward message to all connected clients
+        await self.broadcast(message)
 
 manager = ConnectionManager()
 
