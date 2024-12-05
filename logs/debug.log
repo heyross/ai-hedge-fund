@@ -407,3 +407,130 @@ OSError: [Errno 22] Invalid argument
 2024-12-05 08:55:10,395 - src.message_bus - DEBUG - [message_bus.py:55] - Added subscriber for ui. Total subscribers: 1
 2024-12-05 08:55:10,395 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
 2024-12-05 08:55:10,396 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 09:00:06,279 - src.message_bus - INFO - [message_bus.py:117] - Stopping message bus
+2024-12-05 09:00:06,281 - src.message_bus - INFO - [message_bus.py:125] - Message bus stopped
+2024-12-05 09:00:06,283 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 09:00:06,311 - src.message_bus - INFO - [message_bus.py:117] - Stopping message bus
+2024-12-05 09:00:06,312 - src.message_bus - INFO - [message_bus.py:125] - Message bus stopped
+2024-12-05 09:00:06,312 - src.message_bus - INFO - [message_bus.py:125] - Message bus stopped
+2024-12-05 09:00:06,313 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 09:00:06,313 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 09:00:06,327 - src.message_bus - INFO - [message_bus.py:117] - Stopping message bus
+2024-12-05 09:00:06,328 - src.message_bus - INFO - [message_bus.py:125] - Message bus stopped
+2024-12-05 09:00:06,331 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 09:00:07,866 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:07,867 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:07,867 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 09:00:07,875 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:07,876 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:07,876 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 09:00:07,880 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:07,881 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:07,881 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 09:00:07,897 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:07,897 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:07,898 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 09:00:10,694 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:10,695 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:10,708 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:10,708 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:10,720 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:10,721 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:10,731 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:10,731 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:11,631 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:11,631 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:11,633 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,642 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,643 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,643 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,644 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 09:00:11,645 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:11,645 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 09:00:11,646 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:11,646 - src.message_bus - DEBUG - [message_bus.py:55] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 09:00:11,646 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 09:00:11,647 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 09:00:11,647 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,649 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:11,649 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:11,650 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,659 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,660 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,660 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,661 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 09:00:11,663 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 09:00:11,663 - src.message_bus - DEBUG - [message_bus.py:55] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 09:00:11,664 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 09:00:11,664 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 09:00:11,672 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,673 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,673 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 09:00:11,674 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 09:00:11,675 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,675 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,675 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 09:00:11,678 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 09:00:11,678 - src.message_bus - DEBUG - [message_bus.py:55] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 09:00:11,679 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 09:00:11,680 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus
+2024-12-05 09:00:11,687 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,687 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,688 - LLMConfig - INFO - [llm_config.py:21] - Using local Ollama model
+2024-12-05 09:00:11,688 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 09:00:11,690 - src.server - INFO - [server.py:38] - ConnectionManager subscribing to message bus
+2024-12-05 09:00:11,691 - src.message_bus - DEBUG - [message_bus.py:55] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 09:00:11,691 - src.server - INFO - [server.py:41] - Successfully subscribed to message bus
+2024-12-05 09:00:11,692 - src.message_bus - INFO - [message_bus.py:72] - Starting message bus

@@ -116,6 +116,15 @@ async def websocket_endpoint(websocket: WebSocket):
                 data = json.loads(message)
                 logger.debug(f"Received WebSocket message: {data}")
                 
+                # Handle test connection message
+                if data.get("type") == "test_connection":
+                    logger.info(f"Test connection received from client {client_id}")
+                    await websocket.send_json({
+                        "type": "test_connection_response",
+                        "message": "WebSocket connection verified successfully"
+                    })
+                    continue
+                
                 if data["type"] == "command":
                     if data["action"] == "start" and not manager.system_running:
                         manager.system_running = True
