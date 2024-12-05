@@ -66,15 +66,22 @@ class ConnectionManager:
         """Handle messages from the message bus"""
         logger.debug(f"Received message from bus: {message}")
         
+        # Debug logging for message filtering
+        logger.debug(f"Message type: {message.get('type')}")
+        logger.debug(f"Message private status: {message.get('private', False)}")
+        logger.debug(f"Active connections: {list(self.active_connections.keys())}")
+        
         # Only broadcast messages that should be displayed in UI
-        if message.get("type") in ["agent_thought", "agent_status", "chat", "market_data"]:
+        if message.get("type") in ["agent_thought", "agent_status", "chat", "market_data", "system_message"]:
             # For private messages, only show in specific areas
             if message.get("private", False):
                 # Route agent thoughts and status to their specific spaces
                 if message["sender"] in self.active_connections:
+                    logger.debug(f"Sending private message to {message['sender']}")
                     await self.send_private(message["sender"], message)
             else:
                 # Broadcast public messages to all
+                logger.debug("Broadcasting public message")
                 await self.broadcast(message)
 
 manager = ConnectionManager()
