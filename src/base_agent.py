@@ -19,7 +19,7 @@ class BaseAgent(ABC):
         # Subscribe to messages
         await message_bus.subscribe(self.agent_type, self._handle_message)
         # Start agent's main loop
-        asyncio.create_task(self._run())
+        self._task = asyncio.create_task(self._run())
         logger.info(f"Agent {self.name} started")
         await self._broadcast_status("Running")
 

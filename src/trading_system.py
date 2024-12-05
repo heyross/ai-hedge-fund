@@ -21,19 +21,20 @@ class TradingSystem:
     async def start(self):
         """Start all agents"""
         if self._running:
+            logger.warning("Trading system already running")
             return
 
         self._running = True
         logger.info("Starting trading system")
         
-        # Initialize agents
+        # Start each agent
         for agent_type, agent in self.agents.items():
             try:
-                # Start agent (this will subscribe to message bus)
                 await agent.start()
                 logger.info(f"Started {agent_type} agent")
             except Exception as e:
                 logger.error(f"Error starting {agent_type} agent: {e}")
+                continue
 
         # Announce system start
         await message_bus.publish(
@@ -46,12 +47,13 @@ class TradingSystem:
     async def stop(self):
         """Stop all agents"""
         if not self._running:
+            logger.warning("Trading system not running")
             return
 
         self._running = False
         logger.info("Stopping trading system")
         
-        # Stop all agents
+        # Stop each agent
         for agent_type, agent in self.agents.items():
             try:
                 await agent.stop()

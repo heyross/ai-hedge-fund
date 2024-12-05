@@ -130,24 +130,16 @@ stopButton.addEventListener('click', () => {
 });
 
 function sendMessage() {
-    if (ws && ws.readyState === WebSocket.OPEN && chatInput.value.trim()) {
-        const message = {
-            type: 'user_message',
-            content: chatInput.value.trim()
-        };
-        console.log('Sending message:', message);  // Debug log
-        ws.send(JSON.stringify(message));
-        
-        // Add the message to the chat immediately
-        addGroupMessage({
-            sender: 'You',
-            content: chatInput.value.trim(),
-            timestamp: new Date().toISOString(),
-            category: 'user'
-        });
-        
-        chatInput.value = '';
-    }
+    const content = chatInput.value.trim();
+    if (!content) return;
+
+    // Don't add message locally - wait for server echo
+    ws.send(JSON.stringify({
+        type: 'user_message',
+        content: content
+    }));
+
+    chatInput.value = '';
 }
 
 sendButton.addEventListener('click', sendMessage);

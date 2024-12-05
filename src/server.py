@@ -110,7 +110,15 @@ async def websocket_endpoint(websocket: WebSocket):
             
             elif data["type"] == "user_message":
                 logger.info(f"User message: {data['content']}")
-                # Forward to message bus without echoing back
+                # Echo back to all clients including sender
+                await manager.broadcast({
+                    "type": "user_message",
+                    "sender": "You",
+                    "content": data["content"],
+                    "timestamp": datetime.now().isoformat(),
+                    "category": "user"
+                })
+                # Forward to message bus for agent processing
                 await message_bus.publish(
                     sender="user",
                     message_type="user_message",
