@@ -136,12 +136,41 @@ async def websocket_endpoint(websocket: WebSocket):
                     "category": "user"
                 })
                 # Forward to message bus for agent processing
-                await message_bus.publish(
-                    sender="user",
-                    message_type="user_message",
-                    content=data["content"],
-                    private=False
-                )
+                try:
+                    await message_bus.publish(
+                        sender="user",
+                        message_type="user_message",
+                        content=data["content"],
+                        private=False
+                    )
+                except Exception as e:
+                    logger.error(f"Error publishing user message to message bus: {e}")
+                    # Optionally send an error message back to the client
+                    await websocket.send_json({
+                        "type": "error",
+                        "message": "Failed to process your message"
+                    })
+            
+            elif data["type"] == "agent_thought":
+                # Broadcast agent thoughts to all connected clients
+                logger.info(f"Agent thought received: {data}")
+                await manager.broadcast({
+                    "type": "agent_thought",
+                    "role": data.get("role", "unknown"),
+                    "thought": data.get("content", ""),
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+                # Optionally log or process the thought further
+                try:
+                    await message_bus.publish(
+                        sender=data.get("role", "agent"),
+                        message_type="agent_thought",
+                        content=data.get("content", ""),
+                        private=False
+                    )
+                except Exception as e:
+                    logger.error(f"Error processing agent thought: {e}")
                 
     except WebSocketDisconnect:
         logger.info(f"Client {client_id} disconnected")

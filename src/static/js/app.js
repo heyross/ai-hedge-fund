@@ -113,27 +113,20 @@ function handleMessage(message) {
 
 // New specialized message handlers
 function handleAgentThought(message) {
-    const agentName = message.sender || 'Agent';
-    const privateChat = document.querySelector(`.agent-room.${agentName.toLowerCase()} .private-chat`);
+    const { role, thought, timestamp } = message;
     
-    if (privateChat) {
-        const thoughtElement = document.createElement('div');
-        thoughtElement.className = 'agent-thought';
-        thoughtElement.innerHTML = `
-            <span class="sender">${agentName}</span>
-            <p>${message.content}</p>
-        `;
-        privateChat.appendChild(thoughtElement);
-        privateChat.scrollTop = privateChat.scrollHeight;
+    // Update individual agent thought box
+    updateAgentThought(role, thought);
+    
+    // Optionally add to main chat if it's a significant insight
+    if (thought && thought.length > 50) {
+        addGroupMessage({
+            sender: `${role.replace('_', ' ').toUpperCase()} Agent`,
+            content: thought,
+            timestamp: timestamp,
+            category: 'agent_thought'
+        });
     }
-    
-    // Also add to central chat for transparency
-    addGroupMessage({
-        sender: agentName,
-        content: message.content,
-        timestamp: message.timestamp || new Date().toISOString(),
-        category: 'agent_thought'
-    });
 }
 
 function updateAgentStatus(message) {
@@ -188,6 +181,46 @@ function formatTimestamp(timestamp) {
     return new Date(timestamp).toLocaleTimeString();
 }
 
+// Agent Thought Management
+const agentThoughtContainers = {
+    'market_analyst': document.getElementById('market-analyst-thought'),
+    'trading_strategist': document.getElementById('trading-strategist-thought'),
+    'risk_manager': document.getElementById('risk-manager-thought')
+};
+
+function updateAgentThought(agentRole, thoughtContent) {
+    if (agentThoughtContainers[agentRole]) {
+        const thoughtContainer = agentThoughtContainers[agentRole];
+        
+        // Create a new thought element
+        const thoughtElement = document.createElement('div');
+        thoughtElement.classList.add('agent-thought');
+        thoughtElement.innerHTML = `
+            <span class="thought-timestamp">${new Date().toLocaleTimeString()}</span>
+            <p>${escapeHtml(thoughtContent)}</p>
+        `;
+        
+        // Add animation and limit number of thoughts
+        thoughtElement.classList.add('fade-in');
+        thoughtContainer.insertBefore(thoughtElement, thoughtContainer.firstChild);
+        
+        // Limit to last 5 thoughts
+        if (thoughtContainer.children.length > 5) {
+            thoughtContainer.removeChild(thoughtContainer.lastChild);
+        }
+    }
+}
+
+// Utility function to escape HTML to prevent XSS
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 // Event Listeners
 startButton.addEventListener('click', () => {
     if (ws && ws.readyState === WebSocket.OPEN) {
@@ -213,13 +246,33 @@ function sendMessage() {
     const content = chatInput.value.trim();
     if (!content) return;
 
-    // Don't add message locally - wait for server echo
-    ws.send(JSON.stringify({
-        type: 'user_message',
-        content: content
-    }));
+    // Check WebSocket connection
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        console.error('WebSocket is not connected');
+        alert('Unable to send message. WebSocket is disconnected.');
+        return;
+    }
 
-    chatInput.value = '';
+    // Immediately add message to local chat
+    addGroupMessage({
+        sender: 'You',
+        content: content,
+        timestamp: new Date().toISOString(),
+        category: 'user'
+    });
+
+    // Send message via WebSocket
+    try {
+        ws.send(JSON.stringify({
+            type: 'user_message',
+            content: content
+        }));
+
+        chatInput.value = '';
+    } catch (error) {
+        console.error('Error sending WebSocket message:', error);
+        alert('Failed to send message. Please try again.');
+    }
 }
 
 sendButton.addEventListener('click', sendMessage);
