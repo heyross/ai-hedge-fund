@@ -1,9 +1,14 @@
-from abc import ABC, abstractmethod
 import asyncio
+from datetime import datetime
+import json
 import logging
+from abc import ABC, abstractmethod
 from typing import Any, Dict
+from src.logging_config import setup_logging
 from src.message_bus import message_bus
 
+# Initialize logging
+setup_logging()
 logger = logging.getLogger(__name__)
 
 class BaseAgent(ABC):

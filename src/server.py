@@ -9,9 +9,10 @@ import logging
 from src.message_bus import message_bus
 from src.trading_system import TradingSystem
 from datetime import datetime
+from src.logging_config import setup_logging
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
+# Initialize logging
+setup_logging()
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app

@@ -3,7 +3,10 @@ from typing import Dict, List, Callable, Awaitable, Any
 import json
 import logging
 from datetime import datetime
+from src.logging_config import setup_logging
 
+# Initialize logging
+setup_logging()
 logger = logging.getLogger(__name__)
 
 class MessageBus:
