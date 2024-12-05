@@ -1,14 +1,47 @@
 from typing import Dict, Any
 import asyncio
 import logging
+import os
+import time
 from datetime import datetime
 from src.base_agent import BaseAgent
 from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
+from langchain_community.chat_models import ChatOllama
 from langchain_openai.chat_models import ChatOpenAI
-import time
-import json
+from langchain_core.exceptions import APIConnectionError
+import pandas as pd
 
 logger = logging.getLogger(__name__)
+
+# Fallback LLM Configuration
+class LLMConfig:
+    def __init__(self):
+        self.openai_model = os.getenv('OPENAI_MODEL', 'gpt-3.5-turbo')
+        self.ollama_model = os.getenv('OLLAMA_MODEL', 'llama2')
+        self.use_local_model = False
+        
+    def get_chat_model(self):
+        try:
+            if self.use_local_model:
+                return ChatOllama(model=self.ollama_model, temperature=0.2)
+            else:
+                return ChatOpenAI(
+                    model=self.openai_model, 
+                    temperature=0.2,
+                    max_retries=1
+                )
+        except Exception as e:
+            logging.error(f"Error initializing chat model: {e}")
+            # Fallback to local model if remote fails
+            self.use_local_model = True
+            return ChatOllama(model=self.ollama_model, temperature=0.2)
+
+    def toggle_model(self):
+        self.use_local_model = not self.use_local_model
+        logging.info(f"Switched to {'local Ollama' if self.use_local_model else 'OpenAI'} model")
+
+# Global LLM Configuration
+llm_config = LLMConfig()
 
 class MarketDataAgent(BaseAgent):
     def __init__(self):
@@ -33,12 +66,11 @@ class MarketDataAgent(BaseAgent):
                               self.state.get("end_date"))
             
             if prices is not None:
-                # Convert the prices DataFrame to a serializable format
-                prices_dict = {}
-                for column in prices.columns:
-                    prices_dict[column] = {
-                        str(idx): val for idx, val in prices[column].items()
-                    }
+                # Convert the DataFrame to a format that can be serialized
+                prices_dict = {
+                    'index': [str(idx) for idx in prices.index],
+                    'data': prices.to_dict('records')
+                }
                 
                 await self.broadcast_message({
                     "prices": prices_dict,
@@ -77,11 +109,14 @@ class QuantitativeAgent(BaseAgent):
         try:
             await self.broadcast_thought("Analyzing market data...")
             if "prices" in self.state:
-                df = prices_to_df(self.state["prices"])
+                # Reconstruct DataFrame from the serialized format
+                prices_data = self.state["prices"]
+                df = pd.DataFrame(prices_data['data'])
+                df.index = pd.to_datetime(prices_data['index'])
                 
                 # Calculate technical indicators
-                bb = calculate_bollinger_bands(df)
-                macd = calculate_macd(df)
+                bb_upper, bb_lower = calculate_bollinger_bands(df)
+                macd_line, signal_line = calculate_macd(df)
                 rsi = calculate_rsi(df)
                 obv = calculate_obv(df)
                 
@@ -89,8 +124,8 @@ class QuantitativeAgent(BaseAgent):
                 signals = []
                 
                 # MACD signal
-                macd_diff = macd["macd"] - macd["signal"]
-                signals.append("bullish" if macd_diff.iloc[-1] > 0 else "bearish")
+                macd_diff = macd_line.iloc[-1] - signal_line.iloc[-1]
+                signals.append("bullish" if macd_diff > 0 else "bearish")
                 
                 # RSI signal
                 rsi_value = rsi.iloc[-1]
@@ -98,14 +133,20 @@ class QuantitativeAgent(BaseAgent):
                 
                 # Bollinger Bands signal
                 price = df["close"].iloc[-1]
-                bb_position = (price - bb["middle"]) / (bb["upper"] - bb["middle"])
+                bb_position = (price - (bb_upper.iloc[-1] + bb_lower.iloc[-1])/2) / (bb_upper.iloc[-1] - bb_lower.iloc[-1])
                 signals.append("bullish" if bb_position < -1 else "bearish" if bb_position > 1 else "neutral")
                 
                 analysis = {
                     "signals": signals,
                     "indicators": {
-                        "bollinger_bands": bb.to_dict(),
-                        "macd": macd.to_dict(),
+                        "bollinger_bands": {
+                            "upper": bb_upper.to_dict(),
+                            "lower": bb_lower.to_dict()
+                        },
+                        "macd": {
+                            "macd": macd_line.to_dict(),
+                            "signal": signal_line.to_dict()
+                        },
                         "rsi": rsi.to_dict(),
                         "obv": obv.to_dict(),
                     },

@@ -6,10 +6,20 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict
 from src.logging_config import setup_logging
 from src.message_bus import message_bus
+import os
+import logging
+from typing import Dict, Any
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Initialize logging
 setup_logging()
 logger = logging.getLogger(__name__)
+
+# Add LLM configuration import
+from src.agents import llm_config
 
 class BaseAgent(ABC):
     def __init__(self, name: str, agent_type: str):
@@ -17,6 +27,10 @@ class BaseAgent(ABC):
         self.agent_type = agent_type
         self._running = False
         self.state: Dict[str, Any] = {}
+        self.logger = logging.getLogger(f"{self.__class__.__name__}")
+        
+        # LLM Configuration
+        self.llm = llm_config.get_chat_model()
 
     async def start(self):
         """Start the agent"""
@@ -108,3 +122,23 @@ class BaseAgent(ABC):
             content=content,
             private=False
         )
+
+    def handle_api_error(self, error):
+        """
+        Handle API errors with intelligent fallback
+        """
+        self.logger.error(f"API Error encountered: {error}")
+        
+        # Toggle to local model if remote API fails
+        if not llm_config.use_local_model:
+            llm_config.toggle_model()
+            self.llm = llm_config.get_chat_model()
+            self.logger.warning("Switched to local Ollama model due to API error")
+        
+        return None
+
+    def get_current_model(self):
+        """
+        Return the current active model
+        """
+        return "Ollama" if llm_config.use_local_model else "OpenAI"
