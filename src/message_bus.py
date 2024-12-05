@@ -35,8 +35,7 @@ class MessageBus:
         """Subscribe to messages"""
         if agent_type in self.subscribers:
             self.subscribers[agent_type].append(callback)
-            logger.info(f"New subscriber added for {agent_type}")
-            logger.debug(f"Current subscribers for {agent_type}: {len(self.subscribers[agent_type])}")
+            logger.debug(f"Added subscriber for {agent_type}. Total subscribers: {len(self.subscribers[agent_type])}")
         else:
             logger.warning(f"Unknown agent type: {agent_type}")
 

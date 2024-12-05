@@ -40,34 +40,23 @@ function connectWebSocket() {
 // Message Handlers
 function handleMessage(message) {
     console.log('Handling message:', message);  // Debug log
+    
     switch (message.type) {
         case 'system_status':
             updateSystemStatus(message.data);
             break;
+            
         case 'system_message':
-            addGroupMessage({
-                sender: 'System',
-                content: message.content,
-                timestamp: new Date().toISOString(),
-                category: 'system'
-            });
-            break;
         case 'user_message':
-            addGroupMessage({
-                sender: 'You',
-                content: message.content,
-                timestamp: new Date().toISOString(),
-                category: 'user'
-            });
-            break;
         case 'agent_message':
             addGroupMessage({
                 sender: message.sender,
                 content: message.content,
-                timestamp: message.timestamp,
-                category: 'agent'
+                timestamp: message.timestamp || new Date().toISOString(),
+                category: message.type.replace('_message', '')
             });
             break;
+            
         default:
             console.log('Unknown message type:', message.type);
     }

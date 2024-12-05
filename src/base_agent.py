@@ -48,10 +48,11 @@ class BaseAgent(ABC):
     async def _handle_message(self, message: dict):
         """Handle incoming messages"""
         try:
+            logger.debug(f"Agent {self.name} received message: {message}")
             if not message["private"] or message["sender"] == self.agent_type:
                 await self.handle_message(message)
         except Exception as e:
-            logger.error(f"Error handling message in {self.name}: {e}")
+            logger.error(f"Error handling message in {self.name}: {e}", exc_info=True)
 
     @abstractmethod
     async def handle_message(self, message: dict):

@@ -15,6 +15,12 @@ class MarketDataAgent(BaseAgent):
         super().__init__("Market Data Agent", "market_data")
         self.last_update = 0
         self.update_interval = 60  # Update every 60 seconds
+        # Set default values
+        self.state = {
+            "ticker": "AAPL",
+            "start_date": "2023-01-01",
+            "end_date": "2023-12-31"
+        }
 
     async def process(self):
         if time.time() - self.last_update < self.update_interval:
@@ -42,6 +48,11 @@ class MarketDataAgent(BaseAgent):
     async def handle_message(self, message: dict):
         if message["type"] == "user_message":
             content = message["content"]
+            await self.broadcast_message({
+                "type": "agent_message",
+                "content": f"I am the Market Data Agent. I'll fetch data for {self.state['ticker']} from {self.state['start_date']} to {self.state['end_date']}"
+            })
+            
             if isinstance(content, dict) and "ticker" in content:
                 self.state["ticker"] = content["ticker"]
                 self.last_update = 0  # Force update on ticker change
@@ -103,7 +114,13 @@ class QuantitativeAgent(BaseAgent):
             await self.broadcast_thought(f"Error: {str(e)}")
 
     async def handle_message(self, message: dict):
-        if message["type"] == "market_data":
+        if message["type"] == "user_message":
+            await self.broadcast_message({
+                "type": "agent_message",
+                "content": "I am the Quantitative Agent. I analyze market data using technical indicators like MACD, RSI, and Bollinger Bands."
+            })
+            
+        elif message["type"] == "market_data":
             self.state["prices"] = message["content"]["prices"]
             self.last_analysis = 0  # Force analysis on new data
 
@@ -153,7 +170,13 @@ class RiskManagementAgent(BaseAgent):
             await self.broadcast_thought(f"Error: {str(e)}")
 
     async def handle_message(self, message: dict):
-        if message["type"] == "technical_analysis":
+        if message["type"] == "user_message":
+            await self.broadcast_message({
+                "type": "agent_message",
+                "content": "I am the Risk Management Agent. I assess portfolio risk and set position size limits."
+            })
+            
+        elif message["type"] == "technical_analysis":
             self.state["technical_analysis"] = message["content"]
             self.last_assessment = 0  # Force assessment on new analysis
 
@@ -204,7 +227,13 @@ class PortfolioManagementAgent(BaseAgent):
             await self.broadcast_thought(f"Error: {str(e)}")
 
     async def handle_message(self, message: dict):
-        if message["type"] == "technical_analysis":
+        if message["type"] == "user_message":
+            await self.broadcast_message({
+                "type": "agent_message",
+                "content": "I am the Portfolio Management Agent. I make trading decisions based on technical analysis and risk assessment."
+            })
+            
+        elif message["type"] == "technical_analysis":
             self.state["technical_analysis"] = message["content"]
         elif message["type"] == "risk_assessment":
             self.state["risk_assessment"] = message["content"]
