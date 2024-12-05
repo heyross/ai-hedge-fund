@@ -7,6 +7,65 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions. Th
 3. Risk Management Agent - Evaluates portfolio risk and sets position limits
 4. Portfolio Management Agent - Makes final trading decisions and generates orders
 
+## Prerequisites
+
+### Required Software
+- Python 3.9 or higher
+- Docker Desktop
+- Git
+
+### Python Package Management
+- Poetry (Python package manager)
+  ```bash
+  # Install Poetry
+  python -m pip install poetry
+  
+  # Configure Poetry to create virtualenvs in project directory
+  poetry config virtualenvs.in-project true
+  ```
+
+## Development Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/ai-hedge-fund.git
+   cd ai-hedge-fund
+   ```
+
+2. Install dependencies:
+   ```bash
+   poetry install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   # Copy example environment file
+   cp .env.example .env
+   
+   # Edit .env with your API keys
+   # Required keys:
+   # - OPENAI_API_KEY
+   # - FINANCIAL_DATASETS_API_KEY
+   ```
+
+4. Local Development:
+   ```bash
+   # Activate virtual environment
+   poetry shell
+   
+   # Run the application
+   python src/agents.py
+   ```
+
+5. Docker Development:
+   ```bash
+   # Build the Docker image
+   docker build -t ai-hedge-fund .
+   
+   # Run with Docker Compose
+   docker-compose up
+   ```
+
 ## Table of Contents
 - [Features](#features)
 - [Setup](#setup)
@@ -152,7 +211,7 @@ You can optionally specify the start and end dates to backtest over a specific t
 poetry run python src/backtester.py --ticker AAPL --start-date 2024-01-01 --end-date 2024-03-01
 ```
 
-## Project Structure 
+## Project Structure
 ```
 ai-hedge-fund/
 ├── src/

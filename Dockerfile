@@ -17,14 +17,13 @@ RUN curl -sSL https://install.python-poetry.org | python3 - && \
     poetry config virtualenvs.create false
 
 # Copy project files
-COPY pyproject.toml poetry.lock ./
+COPY . .
 
 # Install dependencies
 RUN poetry install --only main
 
-# Copy source code and README
-COPY src/ ./src/
-COPY README.md ./
+# Add src directory to Python path
+ENV PYTHONPATH=/app
 
 # Environment variables will be provided at runtime through docker-compose
 ENV OPENAI_API_KEY=""
@@ -34,4 +33,4 @@ ENV ALPACA_PAPER_ENDPOINT="https://paper-api.alpaca.markets"
 ENV ALPACA_LIVE_ENDPOINT="https://api.alpaca.markets"
 
 # Command to run the application
-CMD ["poetry", "run", "python", "src/agents.py"]
+CMD ["python", "src/agents.py", "--ticker", "AAPL", "--show-reasoning"]

@@ -6,16 +6,14 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
+    env_file:
+      - .env
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ALPACA_API_KEY=${ALPACA_API_KEY}
-      - ALPACA_SECRET_KEY=${ALPACA_SECRET_KEY}
-      - ALPACA_PAPER_ENDPOINT=${ALPACA_PAPER_ENDPOINT}
-      - ALPACA_LIVE_ENDPOINT=${ALPACA_LIVE_ENDPOINT}
-    command: poetry run python src/agents.py --ticker AAPL --show-reasoning
+      - PYTHONUNBUFFERED=1
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import requests; requests.get('https://paper-api.alpaca.markets/v2/account')"]
       interval: 30s
       timeout: 10s
       retries: 3
+    command: ["python", "src/agents.py", "--ticker", "MSFT", "--start-date", "2024-01-01", "--end-date", "2024-03-01", "--show-reasoning"]
