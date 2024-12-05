@@ -13,42 +13,51 @@ const WS_URL = window.location.hostname === 'localhost'
     ? 'ws://localhost:8000/ws' 
     : `wss://${window.location.host}/ws`;
 
+console.log('WebSocket URL:', WS_URL);  // Debug log
+
 // System State
 let isRunning = false;
 
 // Connect to WebSocket server
 function connectWebSocket() {
     try {
+        console.log('Attempting WebSocket connection...');
         ws = new WebSocket(WS_URL);
         
         ws.onopen = () => {
-            console.log('WebSocket connection established');
+            console.log('WebSocket connection SUCCESSFULLY established');
             updateConnectionStatus(true);
+            
+            // Send a test message to verify connection
+            ws.send(JSON.stringify({
+                type: 'test_connection',
+                message: 'Frontend WebSocket connection verified'
+            }));
         };
         
         ws.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
-                console.log('Received WebSocket message:', message);
+                console.log('RECEIVED WebSocket message:', message);
                 handleMessage(message);
             } catch (parseError) {
-                console.error('Error parsing WebSocket message:', parseError);
-                console.error('Raw message:', event.data);
+                console.error('CRITICAL: Error parsing WebSocket message:', parseError);
+                console.error('Raw received data:', event.data);
             }
         };
         
         ws.onclose = (event) => {
-            console.warn('WebSocket connection closed', event);
+            console.warn('WebSocket connection CLOSED', event);
             updateConnectionStatus(false);
-            setTimeout(connectWebSocket, 3000);  // Increased delay
+            setTimeout(connectWebSocket, 5000);  // Increased reconnection delay
         };
 
         ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            console.error('CRITICAL WebSocket error:', error);
             updateConnectionStatus(false);
         };
     } catch (connectionError) {
-        console.error('WebSocket connection error:', connectionError);
+        console.error('CRITICAL WebSocket connection ERROR:', connectionError);
         updateConnectionStatus(false);
     }
 }
@@ -285,4 +294,7 @@ chatInput.addEventListener('keypress', (e) => {
 });
 
 // Initialize
-connectWebSocket();
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Loaded. Initializing WebSocket connection...');
+    connectWebSocket();
+});
