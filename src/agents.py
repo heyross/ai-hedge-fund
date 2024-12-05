@@ -13,8 +13,8 @@ from src.llm_config import llm_config
 logger = logging.getLogger(__name__)
 
 class MarketDataAgent(BaseAgent):
-    def __init__(self):
-        super().__init__("Market Data Agent", "market_data")
+    def __init__(self, user_name=None):
+        super().__init__("Market Data Agent", "market_data", user_name)
         self.last_update = 0
         self.update_interval = 300  # 5 minutes
         # Set default values
@@ -23,6 +23,15 @@ class MarketDataAgent(BaseAgent):
             "start_date": "2023-01-01",
             "end_date": "2023-12-31"
         }
+
+    async def initialize(self, user_name=None):
+        await super().initialize(user_name)
+        
+        # Additional market data specific initialization
+        await self.broadcast_thought(
+            "I'm analyzing current market conditions and preparing real-time data streams.",
+            private=False
+        )
 
     async def process(self):
         if time.time() - self.last_update < self.update_interval:
@@ -66,10 +75,19 @@ class MarketDataAgent(BaseAgent):
                 self.last_update = 0  # Force update on ticker change
 
 class QuantitativeAgent(BaseAgent):
-    def __init__(self):
-        super().__init__("Quantitative Agent", "quantitative")
+    def __init__(self, user_name=None):
+        super().__init__("Quantitative Agent", "quantitative", user_name)
         self.last_analysis = 0
         self.analysis_interval = 300  # Analyze every 5 minutes
+
+    async def initialize(self, user_name=None):
+        await super().initialize(user_name)
+        
+        # Additional quantitative agent specific initialization
+        await self.broadcast_thought(
+            "Calibrating trading algorithms and preparing strategic analysis.",
+            private=False
+        )
 
     async def process(self):
         if time.time() - self.last_analysis < self.analysis_interval:
@@ -155,10 +173,19 @@ class QuantitativeAgent(BaseAgent):
             self.last_analysis = 0  # Force analysis on new data
 
 class RiskManagementAgent(BaseAgent):
-    def __init__(self):
-        super().__init__("Risk Management Agent", "risk_management")
+    def __init__(self, user_name=None):
+        super().__init__("Risk Management Agent", "risk_management", user_name)
         self.last_assessment = 0
         self.assessment_interval = 300  # Assess every 5 minutes
+
+    async def initialize(self, user_name=None):
+        await super().initialize(user_name)
+        
+        # Additional risk management specific initialization
+        await self.broadcast_thought(
+            "Assessing portfolio risk levels and preparing comprehensive risk mitigation strategies.",
+            private=False
+        )
 
     async def process(self):
         if time.time() - self.last_assessment < self.assessment_interval:
@@ -211,10 +238,19 @@ class RiskManagementAgent(BaseAgent):
             self.last_assessment = 0  # Force assessment on new analysis
 
 class PortfolioManagementAgent(BaseAgent):
-    def __init__(self):
-        super().__init__("Portfolio Management Agent", "portfolio_management")
+    def __init__(self, user_name=None):
+        super().__init__("Portfolio Management Agent", "portfolio_management", user_name)
         self.last_decision = 0
         self.decision_interval = 300  # Make decisions every 5 minutes
+
+    async def initialize(self, user_name=None):
+        await super().initialize(user_name)
+        
+        # Additional portfolio management specific initialization
+        await self.broadcast_thought(
+            "Analyzing portfolio composition and preparing optimization recommendations.",
+            private=False
+        )
 
     async def process(self):
         if time.time() - self.last_decision < self.decision_interval:

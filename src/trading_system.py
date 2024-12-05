@@ -8,24 +8,42 @@ from src.message_bus import message_bus
 logger = logging.getLogger(__name__)
 
 class TradingSystem:
-    def __init__(self):
+    def __init__(self, user_name=None):
+        """
+        Initialize the trading system with optional user name
+        
+        Args:
+            user_name (str, optional): Name of the user interacting with the system
+        """
+        self.user_name = user_name or "Trader"
         self.agents: Dict[str, BaseAgent] = {
-            "market_data": MarketDataAgent(),
-            "quantitative": QuantitativeAgent(),
-            "risk_management": RiskManagementAgent(),
-            "portfolio_management": PortfolioManagementAgent()
+            "market_data": MarketDataAgent(user_name=self.user_name),
+            "quantitative": QuantitativeAgent(user_name=self.user_name),
+            "risk_management": RiskManagementAgent(user_name=self.user_name),
+            "portfolio_management": PortfolioManagementAgent(user_name=self.user_name)
         }
         self._running = False
-        logger.info("Trading system initialized")
+        logger.info(f"Trading system initialized for user: {self.user_name}")
 
-    async def start(self):
-        """Start all agents"""
+    async def start(self, user_name=None):
+        """
+        Start all agents with optional user name update
+        
+        Args:
+            user_name (str, optional): Update user name if provided
+        """
+        if user_name:
+            self.user_name = user_name
+            # Update user name for all agents
+            for agent in self.agents.values():
+                await agent.initialize(user_name=self.user_name)
+
         if self._running:
             logger.warning("Trading system already running")
             return
 
         self._running = True
-        logger.info("Starting trading system")
+        logger.info(f"Starting trading system for {self.user_name}")
         
         # Start each agent
         for agent_type, agent in self.agents.items():
@@ -40,7 +58,7 @@ class TradingSystem:
         await message_bus.publish(
             sender="system",
             message_type="system_message",
-            content="Trading system started. All agents are online and processing data.",
+            content=f"Trading system started for {self.user_name}. All agents are online and processing data.",
             private=False
         )
 

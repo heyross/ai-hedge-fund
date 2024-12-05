@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from src.logging_config import setup_logging
 from src.message_bus import message_bus
 import os
@@ -20,19 +20,60 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 class BaseAgent(ABC):
-    def __init__(self, name: str, agent_type: str):
-        self.name = name
-        self.agent_type = agent_type
-        self._running = False
-        self.state: Dict[str, Any] = {}
-        self.logger = logging.getLogger(f"{self.__class__.__name__}")
+    def __init__(self, name=None, user_name=None):
+        """
+        Initialize the base agent with optional name and user name
+        
+        Args:
+            name (str, optional): Name of the agent
+            user_name (str, optional): Name of the user interacting with the system
+        """
+        self.name = name or self.__class__.__name__
+        self.user_name = user_name or "Trader"
+        self.agent_type = self.name.lower().replace("agent", "")
+        
+        # Logging setup
+        self.logger = logging.getLogger(self.name)
+        
+        # Initialization flag
+        self._initialized = False
         
         # LLM Configuration
         self.llm = llm_config.get_chat_model()
 
+    async def initialize(self, user_name=None):
+        """
+        Initialize the agent with optional user name update
+        
+        Args:
+            user_name (str, optional): Update user name if provided
+        """
+        if user_name:
+            self.user_name = user_name
+        
+        # Announce agent is online
+        await self.broadcast_message(
+            f"{self.name} is online and ready to assist.",
+            message_type="agent_status"
+        )
+        
+        # Personalized greeting
+        await self.broadcast_thought(
+            f"Hello, {self.user_name}! I'm {self.name}, ready to help you navigate the financial markets.",
+            private=False
+        )
+        
+        self._initialized = True
+        self.logger.info(f"{self.name} initialized successfully")
+
     async def start(self):
-        """Start the agent"""
-        self._running = True
+        """
+        Start the agent's core functionality
+        Subclasses should override this method
+        """
+        if not self._initialized:
+            await self.initialize()
+        
         # Subscribe to messages
         await message_bus.subscribe(self.agent_type, self._handle_message)
         # Start agent's main loop
@@ -41,10 +82,17 @@ class BaseAgent(ABC):
         await self._broadcast_status("Running")
 
     async def stop(self):
-        """Stop the agent"""
-        self._running = False
-        logger.info(f"Agent {self.name} stopped")
-        await self._broadcast_status("Stopped")
+        """
+        Stop the agent's core functionality
+        Subclasses should override this method
+        """
+        await self.broadcast_message(
+            f"{self.name} is going offline.",
+            message_type="agent_status"
+        )
+        
+        self._initialized = False
+        self.logger.info(f"{self.name} stopped")
 
     async def _run(self):
         """Enhanced main agent loop with more robust error handling"""
@@ -198,34 +246,55 @@ class BaseAgent(ABC):
             logger.warning(f"Thought generation failed for {self.name}: {e}")
             return f"Continuing my work as {self.name}."
 
-    async def broadcast_thought(self, thought: str = None, context: str = None):
+    async def broadcast_message(self, content: Any, message_type: str = "agent_message", private: bool = False):
         """
-        Enhanced thought broadcasting with optional LLM-generated content
+        Broadcast a message through the message bus
         
         Args:
-            thought (str, optional): Predefined thought to broadcast
-            context (str, optional): Additional context for thought generation
+            content: Message content
+            message_type: Type of message (default: agent_message)
+            private: Whether the message is private (default: False)
         """
-        # If no predefined thought, try to generate one
-        if not thought:
-            thought = await self.generate_contextual_thought(context)
-        
-        # Broadcast the thought
-        await message_bus.publish(
-            sender=self.agent_type,
-            message_type="agent_thought",
-            content=thought,
-            private=False
-        )
+        try:
+            logger.debug(f"{self.__class__.__name__} broadcasting message: {content}")
+            await message_bus.publish(
+                sender=self.__class__.__name__.lower().replace("agent", ""),
+                message_type=message_type,
+                content=content,
+                private=private
+            )
+        except Exception as e:
+            logger.error(f"Error broadcasting message in {self.__class__.__name__}: {e}", exc_info=True)
 
-    async def broadcast_message(self, content: Any, message_type: str = "info"):
-        """Broadcast a message to all agents"""
-        await message_bus.publish(
-            sender=self.agent_type,
-            message_type=message_type,
-            content=content,
-            private=False
-        )
+    async def broadcast_thought(self, thought: str, context: Optional[dict] = None, private: bool = False):
+        """
+        Broadcast an agent's thought with optional context
+        
+        Args:
+            thought: The thought to broadcast
+            context: Optional context for the thought
+            private: Whether the thought is private (default: False)
+        """
+        try:
+            # Generate contextual thought if LLM is available
+            enriched_thought = await self.generate_contextual_thought(thought)
+            
+            logger.debug(f"{self.__class__.__name__} broadcasting thought: {enriched_thought}")
+            await message_bus.publish(
+                sender=self.__class__.__name__.lower().replace("agent", ""),
+                message_type="agent_thought",
+                content=enriched_thought,
+                private=private
+            )
+        except Exception as e:
+            logger.error(f"Error broadcasting thought in {self.__class__.__name__}: {e}", exc_info=True)
+            # Fallback to simple thought broadcast
+            await message_bus.publish(
+                sender=self.__class__.__name__.lower().replace("agent", ""),
+                message_type="agent_thought",
+                content=thought,
+                private=private
+            )
 
     def handle_api_error(self, error):
         """

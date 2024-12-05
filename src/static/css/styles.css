@@ -9,6 +9,8 @@
     --accent-orange: #FF9800;
     --accent-teal: #009688;
     --header-height: 60px;
+    --color-error: #F44336;
+    --color-success: #4CAF50;
 }
 
 * {
@@ -284,6 +286,25 @@ body {
     height: 100%;
     color: rgba(255, 255, 255, 0.5);
     font-style: italic;
+}
+
+/* WebSocket Connection Indicator */
+.connection-indicator {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.connection-indicator svg {
+    transition: color 0.3s ease;
+}
+
+.connection-indicator:not(.connected) svg {
+    color: var(--color-error);
+}
+
+.connection-indicator.connected svg {
+    color: var(--color-success);
 }
 
 /* Responsive Design */
