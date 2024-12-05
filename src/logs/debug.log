@@ -1,1 +1,23 @@
 
+2024-12-04 22:43:52,972 - root - INFO - Logging system initialized
+2024-12-04 22:43:52,973 - src.message_bus - INFO - MessageBus initialized
+2024-12-04 22:43:52,978 - root - INFO - Logging system initialized
+2024-12-04 22:43:52,978 - root - INFO - Logging system initialized
+2024-12-04 22:43:55,011 - root - INFO - Logging system initialized
+2024-12-04 22:43:55,011 - root - INFO - Logging system initialized
+2024-12-04 22:43:55,011 - root - INFO - Logging system initialized
+2024-12-04 22:43:55,013 - src.trading_system - INFO - Trading system initialized
+2024-12-04 22:43:55,013 - src.trading_system - INFO - Trading system initialized
+2024-12-04 22:43:55,013 - src.trading_system - INFO - Trading system initialized
+2024-12-04 22:43:55,016 - src.message_bus - DEBUG - Added subscriber for ui. Total subscribers: 1
+2024-12-04 22:43:55,016 - src.message_bus - DEBUG - Added subscriber for ui. Total subscribers: 1
+2024-12-04 22:43:55,016 - src.message_bus - DEBUG - Added subscriber for ui. Total subscribers: 1
+2024-12-04 22:43:55,017 - src.server - INFO - ConnectionManager subscribed to message bus
+2024-12-04 22:43:55,017 - src.server - INFO - ConnectionManager subscribed to message bus
+2024-12-04 22:43:55,017 - src.server - INFO - ConnectionManager subscribed to message bus
+2024-12-04 22:43:55,018 - src.message_bus - INFO - Starting message bus
+2024-12-04 22:43:55,018 - src.message_bus - INFO - Starting message bus
+2024-12-04 22:43:55,018 - src.message_bus - INFO - Starting message bus
+2024-12-04 22:43:56,335 - src.server - INFO - Client 2222370429584 connected
+2024-12-04 22:43:56,335 - src.server - INFO - Client 2222370429584 connected
+2024-12-04 22:43:56,335 - src.server - INFO - Client 2222370429584 connected
