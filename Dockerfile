@@ -22,6 +22,9 @@ COPY . .
 # Install dependencies
 RUN poetry install --only main
 
+# Expose port for web interface
+EXPOSE 8000
+
 # Add src directory to Python path
 ENV PYTHONPATH=/app
 

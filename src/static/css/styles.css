@@ -1,0 +1,262 @@
+/* Base Styles */
+:root {
+    --bg-color: #1E1E1E;
+    --text-color: #E0E0E0;
+    --accent-green: #4CAF50;
+    --accent-red: #F44336;
+    --accent-blue: #2196F3;
+    --accent-purple: #9C27B0;
+    --accent-orange: #FF9800;
+    --accent-teal: #009688;
+    --header-height: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Layout */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.main-header {
+    height: var(--header-height);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--accent-red);
+}
+
+.status-indicator.running {
+    background-color: var(--accent-green);
+}
+
+.system-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn.start {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.control-btn.stop {
+    background-color: var(--accent-red);
+    color: white;
+}
+
+.settings-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.settings-btn svg {
+    fill: var(--text-color);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    padding: 20px;
+    height: calc(100vh - var(--header-height));
+}
+
+/* Agent Rooms */
+.agent-rooms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.agent-room {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.agent-room h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.private-chat {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+.agent-status {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Agent-specific colors */
+.agent-room.market-data h3 { color: var(--accent-blue); }
+.agent-room.quantitative h3 { color: var(--accent-purple); }
+.agent-room.risk-management h3 { color: var(--accent-orange); }
+.agent-room.portfolio-management h3 { color: var(--accent-teal); }
+
+/* Central Chat */
+.central-chat {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 12px;
+}
+
+.chat-input textarea {
+    flex: 1;
+    min-height: 60px;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    resize: none;
+}
+
+.chat-input button {
+    padding: 0 24px;
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Message Styles */
+.message {
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.agent-name {
+    font-weight: 500;
+}
+
+.timestamp {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.message-content {
+    margin-bottom: 8px;
+}
+
+.message-footer {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 1366px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .agent-rooms {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .agent-rooms {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .agent-rooms {
+        grid-template-columns: 1fr;
+    }
+    
+    .main-header {
+        flex-direction: column;
+        height: auto;
+        padding: 12px;
+    }
+    
+    .status-controls {
+        margin-bottom: 12px;
+    }
+}

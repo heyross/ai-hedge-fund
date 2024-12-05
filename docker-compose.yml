@@ -6,14 +6,17 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
+      - ./src:/app/src
     env_file:
       - .env
     environment:
       - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import requests; requests.get('https://paper-api.alpaca.markets/v2/account')"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 30s
       timeout: 10s
       retries: 3
-    command: ["python", "src/agents.py", "--ticker", "MSFT", "--start-date", "2024-01-01", "--end-date", "2024-03-01", "--show-reasoning"]
+    command: ["python", "src/server.py"]
