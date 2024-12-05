@@ -110,14 +110,7 @@ async def websocket_endpoint(websocket: WebSocket):
             
             elif data["type"] == "user_message":
                 logger.info(f"User message: {data['content']}")
-                # Echo the message back to confirm receipt
-                await manager.broadcast({
-                    "type": "user_message",
-                    "sender": "You",
-                    "content": data["content"],
-                    "timestamp": datetime.now().isoformat()
-                })
-                # Forward to message bus
+                # Forward to message bus without echoing back
                 await message_bus.publish(
                     sender="user",
                     message_type="user_message",

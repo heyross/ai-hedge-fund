@@ -3,6 +3,7 @@ import logging
 from typing import Dict, List
 from src.base_agent import BaseAgent
 from src.agents import MarketDataAgent, QuantitativeAgent, RiskManagementAgent, PortfolioManagementAgent
+from src.message_bus import message_bus
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +29,8 @@ class TradingSystem:
         # Initialize agents
         for agent_type, agent in self.agents.items():
             try:
-                # Subscribe agent to message bus
-                await message_bus.subscribe(agent_type, agent.handle_message)
-                # Start agent processing loop
-                asyncio.create_task(self._run_agent(agent))
+                # Start agent (this will subscribe to message bus)
+                await agent.start()
                 logger.info(f"Started {agent_type} agent")
             except Exception as e:
                 logger.error(f"Error starting {agent_type} agent: {e}")
@@ -52,20 +51,18 @@ class TradingSystem:
         self._running = False
         logger.info("Stopping trading system")
         
+        # Stop all agents
+        for agent_type, agent in self.agents.items():
+            try:
+                await agent.stop()
+                logger.info(f"Stopped {agent_type} agent")
+            except Exception as e:
+                logger.error(f"Error stopping {agent_type} agent: {e}")
+
         # Announce system stop
         await message_bus.publish(
             sender="system",
             message_type="system_message",
-            content="Trading system stopping. All agents will be taken offline.",
+            content="Trading system stopped. All agents are offline.",
             private=False
         )
-
-    async def _run_agent(self, agent):
-        """Run an agent's processing loop"""
-        while self._running:
-            try:
-                await agent.process()
-                await asyncio.sleep(1)  # Prevent tight loop
-            except Exception as e:
-                logger.error(f"Error in agent {agent.name}: {e}")
-                await asyncio.sleep(5)  # Back off on error
