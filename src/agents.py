@@ -1,354 +1,229 @@
-from typing import Annotated, Any, Dict, Sequence, TypedDict
-
-import operator
-from langchain_core.messages import BaseMessage, HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai.chat_models import ChatOpenAI
-from langgraph.graph import END, StateGraph
-
-from tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
-
-import argparse
+from typing import Dict, Any
+import asyncio
+import logging
 from datetime import datetime
+from base_agent import BaseAgent
+from tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
+from langchain_openai.chat_models import ChatOpenAI
+import time
 import json
 
-llm = ChatOpenAI(model="gpt-4o")
+logger = logging.getLogger(__name__)
 
-# Define agent state
-class AgentState(TypedDict):
-    messages: Annotated[Sequence[BaseMessage], operator.add]
-    data: Dict[str, Any]
+class MarketDataAgent(BaseAgent):
+    def __init__(self):
+        super().__init__("Market Data Agent", "market_data")
+        self.last_update = 0
+        self.update_interval = 60  # Update every 60 seconds
 
-##### 1. Market Data Agent #####
-def market_data_agent(state: AgentState):
-    """Responsible for gathering and preprocessing market data"""
-    messages = state["messages"]
-    data = state["data"]
+    async def process(self):
+        if time.time() - self.last_update < self.update_interval:
+            return
 
-    # Set default dates
-    end_date = data["end_date"] or datetime.now().strftime('%Y-%m-%d')
-    if not data["start_date"]:
-        # Calculate 3 months before end_date
-        end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
-        start_date = end_date_obj.replace(month=end_date_obj.month - 3) if end_date_obj.month > 3 else \
-            end_date_obj.replace(year=end_date_obj.year - 1, month=end_date_obj.month + 9)
-        start_date = start_date.strftime('%Y-%m-%d')
-    else:
-        start_date = data["start_date"]
-
-    # Get the historical price data
-    prices = get_prices(data["ticker"], start_date, end_date)
-
-    return {
-        "messages": messages,
-        "data": {**data, "prices": prices, "start_date": start_date, "end_date": end_date}
-    }
-
-##### 2. Quantitative Agent #####
-def quant_agent(state: AgentState):
-    """Analyzes technical indicators and generates trading signals."""
-    show_reasoning = state["messages"][0].additional_kwargs["show_reasoning"]
-
-    data = state["data"]
-    prices = data["prices"]
-    prices_df = prices_to_df(prices)
-    
-    # Calculate indicators
-    # 1. MACD (Moving Average Convergence Divergence)
-    macd_line, signal_line = calculate_macd(prices_df)
-    
-    # 2. RSI (Relative Strength Index)
-    rsi = calculate_rsi(prices_df)
-    
-    # 3. Bollinger Bands (Bollinger Bands)
-    upper_band, lower_band = calculate_bollinger_bands(prices_df)
-    
-    # 4. OBV (On-Balance Volume)
-    obv = calculate_obv(prices_df)
-    
-    # Generate individual signals
-    signals = []
-    
-    # MACD signal
-    if macd_line.iloc[-2] < signal_line.iloc[-2] and macd_line.iloc[-1] > signal_line.iloc[-1]:
-        signals.append('bullish')
-    elif macd_line.iloc[-2] > signal_line.iloc[-2] and macd_line.iloc[-1] < signal_line.iloc[-1]:
-        signals.append('bearish')
-    else:
-        signals.append('neutral')
-    
-    # RSI signal
-    if rsi.iloc[-1] < 30:
-        signals.append('bullish')
-    elif rsi.iloc[-1] > 70:
-        signals.append('bearish')
-    else:
-        signals.append('neutral')
-    
-    # Bollinger Bands signal
-    current_price = prices_df['close'].iloc[-1]
-    if current_price < lower_band.iloc[-1]:
-        signals.append('bullish')
-    elif current_price > upper_band.iloc[-1]:
-        signals.append('bearish')
-    else:
-        signals.append('neutral')
-    
-    # OBV signal
-    obv_slope = obv.diff().iloc[-5:].mean()
-    if obv_slope > 0:
-        signals.append('bullish')
-    elif obv_slope < 0:
-        signals.append('bearish')
-    else:
-        signals.append('neutral')
-    
-    # Add reasoning collection
-    reasoning = {
-        "MACD": {
-            "signal": signals[0],
-            "details": f"MACD Line crossed {'above' if signals[0] == 'bullish' else 'below' if signals[0] == 'bearish' else 'neither above nor below'} Signal Line"
-        },
-        "RSI": {
-            "signal": signals[1],
-            "details": f"RSI is {rsi.iloc[-1]:.2f} ({'oversold' if signals[1] == 'bullish' else 'overbought' if signals[1] == 'bearish' else 'neutral'})"
-        },
-        "Bollinger": {
-            "signal": signals[2],
-            "details": f"Price is {'below lower band' if signals[2] == 'bullish' else 'above upper band' if signals[2] == 'bearish' else 'within bands'}"
-        },
-        "OBV": {
-            "signal": signals[3],
-            "details": f"OBV slope is {obv_slope:.2f} ({signals[3]})"
-        }
-    }
-    
-    # Determine overall signal
-    bullish_signals = signals.count('bullish')
-    bearish_signals = signals.count('bearish')
-    
-    if bullish_signals > bearish_signals:
-        overall_signal = 'bullish'
-    elif bearish_signals > bullish_signals:
-        overall_signal = 'bearish'
-    else:
-        overall_signal = 'neutral'
-    
-    # Calculate confidence level based on the proportion of indicators agreeing
-    total_signals = len(signals)
-    confidence = max(bullish_signals, bearish_signals) / total_signals
-    
-    # Generate the message content
-    message_content = {
-        "signal": overall_signal,
-        "confidence": round(confidence, 2),
-        "reasoning": {
-            "MACD": reasoning["MACD"],
-            "RSI": reasoning["RSI"],
-            "Bollinger": reasoning["Bollinger"],
-            "OBV": reasoning["OBV"]
-        }
-    }
-
-    # Create the quant message
-    message = HumanMessage(
-        content=str(message_content),  # Convert dict to string for message content
-        name="quant_agent",
-    )
-
-    # Print the reasoning if the flag is set
-    if show_reasoning:
-        show_agent_reasoning(message_content, "Quant Agent")
-    
-    return {
-        "messages": state["messages"] + [message],
-        "data": data
-    }
-
-##### 3. Risk Management Agent #####
-def risk_management_agent(state: AgentState):
-    """Evaluates portfolio risk and sets position limits"""
-    show_reasoning = state["messages"][0].additional_kwargs["show_reasoning"]
-    portfolio = state["messages"][0].additional_kwargs["portfolio"]
-    quant_message = state["messages"][-1]
-
-    # Create the prompt template
-    template = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                """You are a risk management specialist.
-                Your job is to take a look at the trading analysis and
-                evaluate portfolio exposure and recommend position sizing.
-                Provide the following in your output (as a JSON):
-                "max_position_size": <float greater than 0>,
-                "risk_score": <integer between 1 and 10>,
-                "trading_action": <buy | sell | hold>,
-                "reasoning": <concise explanation of the decision>
-                """
-            ),
-            (
-                "human",
-                """Based on the trading analysis below, provide your risk assessment.
-
-                Quant Trading Signal: {quant_message}
-
-                Here is the current portfolio:
-                Portfolio:
-                Cash: {portfolio_cash}
-                Current Position: {portfolio_stock} shares
-                
-                Only include the max position size, risk score, trading action, and reasoning in your JSON output.  Do not include any JSON markdown.
-                """
-            ),
-        ]
-    )
-
-    # Generate the prompt
-    prompt = template.invoke(
-        {
-            "quant_message": quant_message.content,
-            "portfolio_cash": f"{portfolio['cash']:.2f}",
-            "portfolio_stock": portfolio["stock"]
-        }
-    )
-
-    # Invoke the LLM
-    result = llm.invoke(prompt)
-    message = HumanMessage(
-        content=result.content,
-        name="risk_management",
-    )
-
-    # Print the decision if the flag is set
-    if show_reasoning:
-        show_agent_reasoning(message.content, "Risk Management Agent")
-
-    return {"messages": state["messages"] + [message]}
-
-
-##### 4. Portfolio Management Agent #####
-def portfolio_management_agent(state: AgentState):
-    """Makes final trading decisions and generates orders"""
-    show_reasoning = state["messages"][0].additional_kwargs["show_reasoning"]
-    portfolio = state["messages"][0].additional_kwargs["portfolio"]
-    risk_message = state["messages"][-1]
-    quant_message = state["messages"][-2]
-
-    # Create the prompt template
-    template = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                """You are a portfolio manager making final trading decisions.
-                Your job is to make a trading decision based on the team's analysis.
-                Provide the following in your output:
-                - "action": "buy" | "sell" | "hold",
-                - "quantity": <positive integer>
-                - "reasoning": <concise explanation of the decision>
-                Only buy if you have available cash.
-                The quantity that you buy must be less than or equal to the max position size.
-                Only sell if you have shares in the portfolio to sell.
-                The quantity that you sell must be less than or equal to the current position."""
-            ),
-            (
-                "human",
-                """Based on the team's analysis below, make your trading decision.
-
-                Quant Team Trading Signal: {quant_message}
-                Risk Management Team Signal: {risk_message}
-
-                Here is the current portfolio:
-                Portfolio:
-                Cash: {portfolio_cash}
-                Current Position: {portfolio_stock} shares
-
-                Only include the action, quantity, and reasoning in your output as JSON.  Do not include any JSON markdown.
-
-                Remember, the action must be either buy, sell, or hold.
-                You can only buy if you have available cash.
-                You can only sell if you have shares in the portfolio to sell.
-                """
-            ),
-        ]
-    )
-
-    # Generate the prompt
-    prompt = template.invoke(
-        {
-            "quant_message": quant_message.content, 
-            "risk_message": risk_message.content,
-            "portfolio_cash": f"{portfolio['cash']:.2f}",
-            "portfolio_stock": portfolio["stock"]
-        }
-    )
-    # Invoke the LLM
-    result = llm.invoke(prompt)
-
-    # Create the portfolio management message
-    message = HumanMessage(
-        content=result.content,
-        name="portfolio_management",
-    )
-
-    # Print the decision if the flag is set
-    if show_reasoning:
-        show_agent_reasoning(message.content, "Portfolio Management Agent")
-
-    return {"messages": state["messages"] + [message]}
-
-def show_agent_reasoning(output, agent_name):
-    print(f"\n{'=' * 10} {agent_name.center(28)} {'=' * 10}")
-    if isinstance(output, (dict, list)):
-        # If output is already a dictionary or list, just pretty print it
-        print(json.dumps(output, indent=2))
-    else:
         try:
-            # Parse the string as JSON and pretty print it
-            parsed_output = json.loads(output)
-            print(json.dumps(parsed_output, indent=2))
-        except json.JSONDecodeError:
-            # Fallback to original string if not valid JSON
-            print(output)
-    print("=" * 48)
+            await self.broadcast_thought("Fetching market data...")
+            prices = get_prices(self.state.get("ticker", "AAPL"), 
+                              self.state.get("start_date"),
+                              self.state.get("end_date"))
+            
+            if prices is not None:
+                await self.broadcast_message({
+                    "prices": prices.to_dict(),
+                    "timestamp": datetime.now().isoformat()
+                }, "market_data")
+                
+                self.last_update = time.time()
+                await self.broadcast_thought("Market data updated successfully")
+            
+        except Exception as e:
+            logger.error(f"Error in MarketDataAgent: {e}")
+            await self.broadcast_thought(f"Error: {str(e)}")
 
-##### Run the Hedge Fund #####
-def run_hedge_fund(ticker: str, start_date: str, end_date: str, portfolio: dict, show_reasoning: bool = False):
-    final_state = app.invoke(
-        {
-            "messages": [
-                HumanMessage(
-                    content="Make a trading decision based on the provided data.",
-                    additional_kwargs={
-                        "portfolio": portfolio,
-                        "show_reasoning": show_reasoning,
+    async def handle_message(self, message: dict):
+        if message["type"] == "user_message":
+            content = message["content"]
+            if isinstance(content, dict) and "ticker" in content:
+                self.state["ticker"] = content["ticker"]
+                self.last_update = 0  # Force update on ticker change
+
+class QuantitativeAgent(BaseAgent):
+    def __init__(self):
+        super().__init__("Quantitative Agent", "quantitative")
+        self.last_analysis = 0
+        self.analysis_interval = 300  # Analyze every 5 minutes
+
+    async def process(self):
+        if time.time() - self.last_analysis < self.analysis_interval:
+            return
+
+        try:
+            await self.broadcast_thought("Analyzing market data...")
+            if "prices" in self.state:
+                df = prices_to_df(self.state["prices"])
+                
+                # Calculate technical indicators
+                bb = calculate_bollinger_bands(df)
+                macd = calculate_macd(df)
+                rsi = calculate_rsi(df)
+                obv = calculate_obv(df)
+                
+                # Generate signals
+                signals = []
+                
+                # MACD signal
+                macd_diff = macd["macd"] - macd["signal"]
+                signals.append("bullish" if macd_diff.iloc[-1] > 0 else "bearish")
+                
+                # RSI signal
+                rsi_value = rsi.iloc[-1]
+                signals.append("bullish" if rsi_value < 30 else "bearish" if rsi_value > 70 else "neutral")
+                
+                # Bollinger Bands signal
+                price = df["close"].iloc[-1]
+                bb_position = (price - bb["middle"]) / (bb["upper"] - bb["middle"])
+                signals.append("bullish" if bb_position < -1 else "bearish" if bb_position > 1 else "neutral")
+                
+                analysis = {
+                    "signals": signals,
+                    "indicators": {
+                        "bollinger_bands": bb.to_dict(),
+                        "macd": macd.to_dict(),
+                        "rsi": rsi.to_dict(),
+                        "obv": obv.to_dict(),
                     },
-                )
-            ],
-            "data": {
-                "ticker": ticker,
-                "start_date": start_date,
-                "end_date": end_date
-            },
-        },
-    )
-    return final_state["messages"][-1].content
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                await self.broadcast_message(analysis, "technical_analysis")
+                self.last_analysis = time.time()
+                await self.broadcast_thought("Technical analysis completed")
+                
+        except Exception as e:
+            logger.error(f"Error in QuantitativeAgent: {e}")
+            await self.broadcast_thought(f"Error: {str(e)}")
+
+    async def handle_message(self, message: dict):
+        if message["type"] == "market_data":
+            self.state["prices"] = message["content"]["prices"]
+            self.last_analysis = 0  # Force analysis on new data
+
+class RiskManagementAgent(BaseAgent):
+    def __init__(self):
+        super().__init__("Risk Management Agent", "risk_management")
+        self.last_assessment = 0
+        self.assessment_interval = 300  # Assess every 5 minutes
+
+    async def process(self):
+        if time.time() - self.last_assessment < self.assessment_interval:
+            return
+
+        try:
+            await self.broadcast_thought("Assessing portfolio risk...")
+            if "technical_analysis" in self.state:
+                analysis = self.state["technical_analysis"]
+                signals = analysis["signals"]
+                
+                # Simple risk scoring
+                bullish_count = signals.count("bullish")
+                bearish_count = signals.count("bearish")
+                
+                if bearish_count > bullish_count:
+                    risk_level = "high"
+                    max_position = 0.05  # 5% max position
+                elif bullish_count > bearish_count:
+                    risk_level = "low"
+                    max_position = 0.15  # 15% max position
+                else:
+                    risk_level = "medium"
+                    max_position = 0.1   # 10% max position
+                
+                assessment = {
+                    "risk_level": risk_level,
+                    "max_position_size": max_position,
+                    "stop_loss": 0.02,  # 2% stop loss
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                await self.broadcast_message(assessment, "risk_assessment")
+                self.last_assessment = time.time()
+                await self.broadcast_thought(f"Risk assessment completed: {risk_level} risk")
+                
+        except Exception as e:
+            logger.error(f"Error in RiskManagementAgent: {e}")
+            await self.broadcast_thought(f"Error: {str(e)}")
+
+    async def handle_message(self, message: dict):
+        if message["type"] == "technical_analysis":
+            self.state["technical_analysis"] = message["content"]
+            self.last_assessment = 0  # Force assessment on new analysis
+
+class PortfolioManagementAgent(BaseAgent):
+    def __init__(self):
+        super().__init__("Portfolio Management Agent", "portfolio_management")
+        self.last_decision = 0
+        self.decision_interval = 300  # Make decisions every 5 minutes
+
+    async def process(self):
+        if time.time() - self.last_decision < self.decision_interval:
+            return
+
+        try:
+            await self.broadcast_thought("Making trading decisions...")
+            if all(k in self.state for k in ["technical_analysis", "risk_assessment"]):
+                analysis = self.state["technical_analysis"]
+                risk = self.state["risk_assessment"]
+                
+                signals = analysis["signals"]
+                bullish_count = signals.count("bullish")
+                bearish_count = signals.count("bearish")
+                
+                if bullish_count > bearish_count and risk["risk_level"] != "high":
+                    action = "buy"
+                    reason = "Bullish signals with acceptable risk"
+                elif bearish_count > bullish_count or risk["risk_level"] == "high":
+                    action = "sell"
+                    reason = "Bearish signals or high risk"
+                else:
+                    action = "hold"
+                    reason = "Mixed signals or neutral risk"
+                
+                decision = {
+                    "action": action,
+                    "reason": reason,
+                    "max_position_size": risk["max_position_size"],
+                    "stop_loss": risk["stop_loss"],
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                await self.broadcast_message(decision, "trading_decision")
+                self.last_decision = time.time()
+                await self.broadcast_thought(f"Trading decision made: {action}")
+                
+        except Exception as e:
+            logger.error(f"Error in PortfolioManagementAgent: {e}")
+            await self.broadcast_thought(f"Error: {str(e)}")
+
+    async def handle_message(self, message: dict):
+        if message["type"] == "technical_analysis":
+            self.state["technical_analysis"] = message["content"]
+        elif message["type"] == "risk_assessment":
+            self.state["risk_assessment"] = message["content"]
+            self.last_decision = 0  # Force decision on new risk assessment
 
 # Define the new workflow
-workflow = StateGraph(AgentState)
+workflow = StateGraph()
 
 # Add nodes
-workflow.add_node("market_data_agent", market_data_agent)
-workflow.add_node("quant_agent", quant_agent)
-workflow.add_node("risk_management_agent", risk_management_agent)
-workflow.add_node("portfolio_management_agent", portfolio_management_agent)
+workflow.add_node("market_data_agent", MarketDataAgent())
+workflow.add_node("quant_agent", QuantitativeAgent())
+workflow.add_node("risk_management_agent", RiskManagementAgent())
+workflow.add_node("portfolio_management_agent", PortfolioManagementAgent())
 
 # Define the workflow
 workflow.set_entry_point("market_data_agent")
 workflow.add_edge("market_data_agent", "quant_agent")
 workflow.add_edge("quant_agent", "risk_management_agent")
 workflow.add_edge("risk_management_agent", "portfolio_management_agent")
-workflow.add_edge("portfolio_management_agent", END)
 
 app = workflow.compile()
 
@@ -381,12 +256,15 @@ if __name__ == "__main__":
         "stock": 0         # No initial stock position
     }
     
-    result = run_hedge_fund(
-        ticker=args.ticker,
-        start_date=args.start_date,
-        end_date=args.end_date,
-        portfolio=portfolio,
-        show_reasoning=args.show_reasoning
-    )
+    result = app.invoke({
+        "market_data_agent": {
+            "ticker": args.ticker,
+            "start_date": args.start_date,
+            "end_date": args.end_date
+        },
+        "quant_agent": {},
+        "risk_management_agent": {},
+        "portfolio_management_agent": {}
+    })
     print("\nFinal Result:")
     print(result)
