@@ -5,10 +5,8 @@ from datetime import datetime
 from src.base_agent import BaseAgent
 from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
 from langchain_openai.chat_models import ChatOpenAI
-from langgraph.graph import StateGraph
 import time
 import json
-import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -212,24 +210,6 @@ class PortfolioManagementAgent(BaseAgent):
             self.state["risk_assessment"] = message["content"]
             self.last_decision = 0  # Force decision on new risk assessment
 
-# Define the new workflow
-workflow = StateGraph()
-
-# Add nodes
-workflow.add_node("market_data_agent", MarketDataAgent())
-workflow.add_node("quant_agent", QuantitativeAgent())
-workflow.add_node("risk_management_agent", RiskManagementAgent())
-workflow.add_node("portfolio_management_agent", PortfolioManagementAgent())
-
-# Define the workflow
-workflow.set_entry_point("market_data_agent")
-workflow.add_edge("market_data_agent", "quant_agent")
-workflow.add_edge("quant_agent", "risk_management_agent")
-workflow.add_edge("risk_management_agent", "portfolio_management_agent")
-
-app = workflow.compile()
-
-# Add this at the bottom of the file
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run the hedge fund trading system')
     parser.add_argument('--ticker', type=str, required=True, help='Stock ticker symbol')
@@ -258,7 +238,7 @@ if __name__ == "__main__":
         "stock": 0         # No initial stock position
     }
     
-    result = app.invoke({
+    result = {
         "market_data_agent": {
             "ticker": args.ticker,
             "start_date": args.start_date,
@@ -267,6 +247,6 @@ if __name__ == "__main__":
         "quant_agent": {},
         "risk_management_agent": {},
         "portfolio_management_agent": {}
-    })
+    }
     print("\nFinal Result:")
     print(result)
