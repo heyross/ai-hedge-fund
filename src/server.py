@@ -8,9 +8,10 @@ from typing import Dict
 import logging
 from src.message_bus import message_bus
 from src.trading_system import TradingSystem
+from datetime import datetime
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
@@ -88,6 +89,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_text()
             data = json.loads(message)
+            logger.debug(f"Received WebSocket message: {data}")
             
             if data["type"] == "command":
                 if data["action"] == "start" and not manager.system_running:
@@ -107,7 +109,15 @@ async def websocket_endpoint(websocket: WebSocket):
                     await trading_system.stop()
             
             elif data["type"] == "user_message":
-                # Broadcast user message to all agents through message bus
+                logger.info(f"User message: {data['content']}")
+                # Echo the message back to confirm receipt
+                await manager.broadcast({
+                    "type": "user_message",
+                    "sender": "You",
+                    "content": data["content"],
+                    "timestamp": datetime.now().isoformat()
+                })
+                # Forward to message bus
                 await message_bus.publish(
                     sender="user",
                     message_type="user_message",
@@ -116,6 +126,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 )
                 
     except WebSocketDisconnect:
+        logger.info(f"Client {client_id} disconnected")
         manager.disconnect(client_id)
     except Exception as e:
         logger.error(f"WebSocket error: {e}")

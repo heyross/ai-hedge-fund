@@ -23,84 +23,82 @@ function connectWebSocket() {
     
     ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
+        console.log('Received message:', message);  // Debug log
         handleMessage(message);
     };
     
     ws.onclose = () => {
         console.log('Disconnected from server');
-        if (isRunning) {
-            // Attempt to reconnect
-            setTimeout(connectWebSocket, 1000);
-        }
+        setTimeout(connectWebSocket, 1000);
+    };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
     };
 }
 
 // Message Handlers
 function handleMessage(message) {
+    console.log('Handling message:', message);  // Debug log
     switch (message.type) {
         case 'system_status':
             updateSystemStatus(message.data);
             break;
-        case 'group_message':
-            addGroupMessage(message.data);
+        case 'system_message':
+            addGroupMessage({
+                sender: 'System',
+                content: message.content,
+                timestamp: new Date().toISOString(),
+                category: 'system'
+            });
             break;
-        case 'private_message':
-            addPrivateMessage(message.data);
+        case 'user_message':
+            addGroupMessage({
+                sender: 'You',
+                content: message.content,
+                timestamp: new Date().toISOString(),
+                category: 'user'
+            });
             break;
-        case 'agent_status':
-            updateAgentStatus(message.data);
+        case 'agent_message':
+            addGroupMessage({
+                sender: message.sender,
+                content: message.content,
+                timestamp: message.timestamp,
+                category: 'agent'
+            });
             break;
-        case 'portfolio_update':
-            updatePortfolioValue(message.data);
-            break;
+        default:
+            console.log('Unknown message type:', message.type);
     }
 }
 
 // UI Updates
 function updateSystemStatus(status) {
     isRunning = status.running;
-    statusIndicator.classList.toggle('running', isRunning);
+    statusIndicator.classList.toggle('active', isRunning);
     statusText.textContent = isRunning ? 'System Running' : 'System Stopped';
     startButton.disabled = isRunning;
     stopButton.disabled = !isRunning;
 }
 
 function addGroupMessage(message) {
+    console.log('Adding group message:', message);  // Debug log
     const messageElement = createMessageElement(message);
     centralChat.appendChild(messageElement);
     centralChat.scrollTop = centralChat.scrollHeight;
 }
 
-function addPrivateMessage(message) {
-    const agentRoom = document.querySelector(`.agent-room.${message.agent.toLowerCase()} .private-chat`);
-    const messageElement = createMessageElement(message);
-    agentRoom.appendChild(messageElement);
-    agentRoom.scrollTop = agentRoom.scrollHeight;
-}
-
-function updateAgentStatus(status) {
-    const agentStatusElement = document.querySelector(`.agent-room.${status.agent.toLowerCase()} .agent-status .status`);
-    agentStatusElement.textContent = status.status;
-}
-
-function updatePortfolioValue(value) {
-    document.querySelector('.portfolio-value .value').textContent = formatCurrency(value);
-}
-
-// Helper Functions
 function createMessageElement(message) {
     const div = document.createElement('div');
-    div.className = 'message';
+    div.className = `message ${message.category}`;
     
     div.innerHTML = `
         <div class="message-header">
-            <span class="agent-name">${message.sender}</span>
+            <span class="sender">${message.sender}</span>
             <span class="timestamp">${formatTimestamp(message.timestamp)}</span>
         </div>
         <div class="message-content">${message.content}</div>
-        <div class="message-footer">
-            <span class="message-type">${message.category}</span>
-        </div>
     `;
     
     return div;
@@ -110,16 +108,10 @@ function formatTimestamp(timestamp) {
     return new Date(timestamp).toLocaleTimeString();
 }
 
-function formatCurrency(value) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-    }).format(value);
-}
-
 // Event Listeners
 startButton.addEventListener('click', () => {
-    if (ws) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        console.log('Sending start command');  // Debug log
         ws.send(JSON.stringify({
             type: 'command',
             action: 'start'
@@ -128,7 +120,8 @@ startButton.addEventListener('click', () => {
 });
 
 stopButton.addEventListener('click', () => {
-    if (ws) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        console.log('Sending stop command');  // Debug log
         ws.send(JSON.stringify({
             type: 'command',
             action: 'stop'
@@ -136,20 +129,33 @@ stopButton.addEventListener('click', () => {
     }
 });
 
-sendButton.addEventListener('click', () => {
-    if (ws && chatInput.value.trim()) {
-        ws.send(JSON.stringify({
+function sendMessage() {
+    if (ws && ws.readyState === WebSocket.OPEN && chatInput.value.trim()) {
+        const message = {
             type: 'user_message',
             content: chatInput.value.trim()
-        }));
+        };
+        console.log('Sending message:', message);  // Debug log
+        ws.send(JSON.stringify(message));
+        
+        // Add the message to the chat immediately
+        addGroupMessage({
+            sender: 'You',
+            content: chatInput.value.trim(),
+            timestamp: new Date().toISOString(),
+            category: 'user'
+        });
+        
         chatInput.value = '';
     }
-});
+}
+
+sendButton.addEventListener('click', sendMessage);
 
 chatInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        sendButton.click();
+        sendMessage();
     }
 });
 
