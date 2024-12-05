@@ -1,0 +1,48 @@
+2024-12-05 08:44:12,299 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:12,300 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:12,300 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:44:14,093 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:14,093 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:14,686 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:14,686 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:14,692 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:15,480 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:16,249 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:17,052 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:17,867 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:44:17,869 - src.message_bus - DEBUG - [message_bus.py:50] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 08:44:17,869 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 08:44:17,870 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:44:40,904 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:40,904 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:40,905 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 08:44:42,765 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:42,766 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:43,412 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 08:44:43,413 - root - DEBUG - [logging_config.py:90] - Log directory: c:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 08:44:43,414 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:44,255 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:45,081 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:45,934 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 08:44:46,813 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 08:44:46,814 - src.message_bus - DEBUG - [message_bus.py:50] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 08:44:46,815 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 08:44:46,815 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 08:47:18,036 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:47:18,036 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 08:47:18,038 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument
+2024-12-05 08:47:18,068 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 08:47:18,068 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
