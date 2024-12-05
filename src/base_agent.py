@@ -47,15 +47,31 @@ class BaseAgent(ABC):
         await self._broadcast_status("Stopped")
 
     async def _run(self):
-        """Main agent loop"""
+        """Enhanced main agent loop with more robust error handling"""
+        consecutive_errors = 0
+        max_consecutive_errors = 3
+
         while self._running:
             try:
                 await self.process()
                 await asyncio.sleep(1)  # Prevent busy waiting
+                consecutive_errors = 0  # Reset error count on successful run
             except Exception as e:
-                logger.error(f"Error in agent {self.name}: {e}")
-                await self._broadcast_status(f"Error: {str(e)}")
-                await asyncio.sleep(5)  # Wait before retrying
+                consecutive_errors += 1
+                error_message = f"Error in agent {self.name}: {e}"
+                logger.error(error_message, exc_info=True)
+                
+                # Broadcast error thoughts with increasing urgency
+                if consecutive_errors == 1:
+                    await self.broadcast_thought(f"Encountered an issue: {error_message}")
+                elif consecutive_errors == 2:
+                    await self.broadcast_thought(f"Persistent issue detected. Attempting recovery: {error_message}")
+                elif consecutive_errors >= max_consecutive_errors:
+                    await self.broadcast_thought(f"CRITICAL: Multiple consecutive errors. Agent may need manual intervention.")
+                    await self.stop()  # Stop the agent if too many errors occur
+                
+                # Exponential backoff for error recovery
+                await asyncio.sleep(min(2 ** consecutive_errors, 60))  # Max 1 minute wait
 
     @abstractmethod
     async def process(self):
@@ -79,15 +95,44 @@ class BaseAgent(ABC):
             logger.error(f"Error handling message in {self.name}: {e}", exc_info=True)
 
     async def handle_chat(self, message: dict):
-        """Handle chat messages - can be overridden by subclasses"""
-        # Default implementation just acknowledges the message
-        response = f"Received your message. I am {self.name}."
-        await message_bus.publish(
-            sender=self.agent_type,
-            message_type="chat",
-            content=response,
-            private=False
-        )
+        """Enhanced chat handling with more interactive responses"""
+        try:
+            # Extract message content and sender
+            content = message.get("content", "")
+            sender = message.get("sender", "Unknown")
+
+            # Generate a contextual response using the LLM
+            try:
+                llm_response = await self.llm.generate(
+                    messages=[
+                        {"role": "system", "content": f"You are {self.name}. Respond naturally and concisely."},
+                        {"role": "user", "content": content}
+                    ]
+                )
+                response_text = llm_response.generations[0].text.strip()
+            except Exception as e:
+                # Fallback to a default response if LLM fails
+                response_text = f"I heard you, {sender}. As the {self.name}, I'm processing your message: {content}"
+                logger.warning(f"LLM chat generation failed: {e}")
+
+            # Broadcast the response
+            await message_bus.publish(
+                sender=self.agent_type,
+                message_type="chat",
+                content={
+                    "text": response_text,
+                    "in_response_to": content,
+                    "original_sender": sender
+                },
+                private=False
+            )
+
+            # Also broadcast a thought to add more context
+            await self.broadcast_thought(f"Responding to message from {sender}")
+
+        except Exception as e:
+            logger.error(f"Error in chat handling for {self.name}: {e}")
+            await self.broadcast_thought(f"Error processing chat: {str(e)}")
 
     @abstractmethod
     async def handle_message(self, message: dict):
@@ -99,17 +144,78 @@ class BaseAgent(ABC):
         await message_bus.publish(
             sender=self.agent_type,
             message_type="agent_status",
-            content={"agent": self.name, "status": status},
-            private=True
+            content={
+                "agent": self.name,
+                "status": status
+            },
+            private=False
+        )
+        
+        # Also publish a thought to make it more interactive
+        await message_bus.publish(
+            sender=self.agent_type,
+            message_type="agent_thought",
+            content=f"{self.name} is currently {status.lower()}.",
+            private=False
         )
 
-    async def broadcast_thought(self, thought: str):
-        """Broadcast agent's current thoughts"""
+    async def generate_contextual_thought(self, context: str = None) -> str:
+        """
+        Generate a more nuanced, context-aware thought using the LLM
+        
+        Args:
+            context (str, optional): Additional context for thought generation
+        
+        Returns:
+            str: A generated thought
+        """
+        try:
+            # Prepare system prompt with agent's role and current state
+            system_prompt = f"""
+            You are {self.name}. Generate a brief, introspective thought that reflects 
+            your current state of mind and ongoing tasks. Be professional, concise, 
+            and provide insight into your current cognitive process.
+            """
+            
+            # Add optional context to the prompt
+            user_prompt = f"Current context: {context}" if context else "Reflect on your current state."
+            
+            # Generate thought using LLM
+            thought_response = await self.llm.generate(
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
+            )
+            
+            # Extract and clean the generated thought
+            generated_thought = thought_response.generations[0].text.strip()
+            
+            # Fallback if generation fails
+            return generated_thought or f"Processing tasks as {self.name}."
+        
+        except Exception as e:
+            logger.warning(f"Thought generation failed for {self.name}: {e}")
+            return f"Continuing my work as {self.name}."
+
+    async def broadcast_thought(self, thought: str = None, context: str = None):
+        """
+        Enhanced thought broadcasting with optional LLM-generated content
+        
+        Args:
+            thought (str, optional): Predefined thought to broadcast
+            context (str, optional): Additional context for thought generation
+        """
+        # If no predefined thought, try to generate one
+        if not thought:
+            thought = await self.generate_contextual_thought(context)
+        
+        # Broadcast the thought
         await message_bus.publish(
             sender=self.agent_type,
             message_type="agent_thought",
             content=thought,
-            private=False  # Changed to false so thoughts appear in agent spaces
+            private=False
         )
 
     async def broadcast_message(self, content: Any, message_type: str = "info"):
