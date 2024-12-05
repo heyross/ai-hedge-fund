@@ -1,1 +1,0 @@
-2024-12-05 00:01:09,388 - src.server - ERROR - [server.py:56] - Error broadcasting message: keys must be str, int, float, bool or None, not tuple
