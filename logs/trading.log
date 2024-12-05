@@ -1,0 +1,45 @@
+2024-12-05 00:18:37,050 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:18:37,052 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 00:18:37,066 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:18:37,086 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:19:50,772 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:19:50,773 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 00:19:54,034 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:20:15,765 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:20:15,768 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 00:20:17,493 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:20:18,103 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:20:18,105 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 00:20:19,613 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 00:20:20,420 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 00:20:21,231 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 00:20:21,984 - src.trading_system - INFO - [trading_system.py:19] - Trading system initialized
+2024-12-05 00:20:21,987 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 00:20:21,987 - src.message_bus - INFO - [message_bus.py:47] - Starting message bus
+2024-12-05 00:20:30,968 - src.server - INFO - [server.py:43] - Client 2017198284608 connected
+2024-12-05 00:21:00,723 - src.server - INFO - [server.py:140] - Client 2017198284608 disconnected
+2024-12-05 00:21:00,724 - src.server - INFO - [server.py:48] - Client 2017198284608 disconnected
+2024-12-05 00:21:01,085 - src.server - INFO - [server.py:43] - Client 2017198285232 connected
+2024-12-05 00:21:02,250 - src.trading_system - INFO - [trading_system.py:28] - Starting trading system
+2024-12-05 00:21:02,251 - src.base_agent - INFO - [base_agent.py:40] - Agent Market Data Agent started
+2024-12-05 00:21:02,252 - src.trading_system - INFO - [trading_system.py:34] - Started market_data agent
+2024-12-05 00:21:02,253 - src.base_agent - INFO - [base_agent.py:40] - Agent Quantitative Agent started
+2024-12-05 00:21:02,254 - src.trading_system - INFO - [trading_system.py:34] - Started quantitative agent
+2024-12-05 00:21:02,255 - src.base_agent - INFO - [base_agent.py:40] - Agent Risk Management Agent started
+2024-12-05 00:21:02,256 - src.trading_system - INFO - [trading_system.py:34] - Started risk_management agent
+2024-12-05 00:21:02,257 - src.base_agent - INFO - [base_agent.py:40] - Agent Portfolio Management Agent started
+2024-12-05 00:21:02,260 - src.trading_system - INFO - [trading_system.py:34] - Started portfolio_management agent
+2024-12-05 00:21:04,265 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:05,091 - src.server - INFO - [server.py:122] - User message: hi
+2024-12-05 00:21:05,276 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:06,262 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:07,279 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:07,971 - src.trading_system - INFO - [trading_system.py:54] - Stopping trading system
+2024-12-05 00:21:07,972 - src.base_agent - INFO - [base_agent.py:46] - Agent Market Data Agent stopped
+2024-12-05 00:21:07,973 - src.trading_system - INFO - [trading_system.py:60] - Stopped market_data agent
+2024-12-05 00:21:07,974 - src.base_agent - INFO - [base_agent.py:46] - Agent Quantitative Agent stopped
+2024-12-05 00:21:07,975 - src.trading_system - INFO - [trading_system.py:60] - Stopped quantitative agent
+2024-12-05 00:21:07,975 - src.base_agent - INFO - [base_agent.py:46] - Agent Risk Management Agent stopped
+2024-12-05 00:21:07,976 - src.trading_system - INFO - [trading_system.py:60] - Stopped risk_management agent
+2024-12-05 00:21:07,976 - src.base_agent - INFO - [base_agent.py:46] - Agent Portfolio Management Agent stopped
+2024-12-05 00:21:07,977 - src.trading_system - INFO - [trading_system.py:60] - Stopped portfolio_management agent

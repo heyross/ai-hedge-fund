@@ -4,50 +4,19 @@ import logging
 import os
 import time
 from datetime import datetime
-from src.base_agent import BaseAgent
-from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
-from langchain_community.chat_models import ChatOllama
-from langchain_openai.chat_models import ChatOpenAI
-from langchain_core.exceptions import APIConnectionError
 import pandas as pd
 
+from src.base_agent import BaseAgent
+from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
+from src.llm_config import llm_config
+
 logger = logging.getLogger(__name__)
-
-# Fallback LLM Configuration
-class LLMConfig:
-    def __init__(self):
-        self.openai_model = os.getenv('OPENAI_MODEL', 'gpt-3.5-turbo')
-        self.ollama_model = os.getenv('OLLAMA_MODEL', 'llama2')
-        self.use_local_model = False
-        
-    def get_chat_model(self):
-        try:
-            if self.use_local_model:
-                return ChatOllama(model=self.ollama_model, temperature=0.2)
-            else:
-                return ChatOpenAI(
-                    model=self.openai_model, 
-                    temperature=0.2,
-                    max_retries=1
-                )
-        except Exception as e:
-            logging.error(f"Error initializing chat model: {e}")
-            # Fallback to local model if remote fails
-            self.use_local_model = True
-            return ChatOllama(model=self.ollama_model, temperature=0.2)
-
-    def toggle_model(self):
-        self.use_local_model = not self.use_local_model
-        logging.info(f"Switched to {'local Ollama' if self.use_local_model else 'OpenAI'} model")
-
-# Global LLM Configuration
-llm_config = LLMConfig()
 
 class MarketDataAgent(BaseAgent):
     def __init__(self):
         super().__init__("Market Data Agent", "market_data")
         self.last_update = 0
-        self.update_interval = 60  # Update every 60 seconds
+        self.update_interval = 300  # 5 minutes
         # Set default values
         self.state = {
             "ticker": "AAPL",
