@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import asyncio
 import logging
 from typing import Any, Dict
-from message_bus import message_bus
+from src.message_bus import message_bus
 
 logger = logging.getLogger(__name__)
 

@@ -6,8 +6,8 @@ import json
 import asyncio
 from typing import Dict, Set
 import logging
-from message_bus import message_bus
-from trading_system import TradingSystem
+from src.message_bus import message_bus
+from src.trading_system import TradingSystem
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -1,8 +1,8 @@
 import asyncio
 import logging
 from typing import Dict, List
-from base_agent import BaseAgent
-from agents import MarketDataAgent, QuantitativeAgent, RiskManagementAgent, PortfolioManagementAgent
+from src.base_agent import BaseAgent
+from src.agents import MarketDataAgent, QuantitativeAgent, RiskManagementAgent, PortfolioManagementAgent
 
 logger = logging.getLogger(__name__)
 

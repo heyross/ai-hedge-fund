@@ -2,8 +2,8 @@ from typing import Dict, Any
 import asyncio
 import logging
 from datetime import datetime
-from base_agent import BaseAgent
-from tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
+from src.base_agent import BaseAgent
+from src.tools import calculate_bollinger_bands, calculate_macd, calculate_obv, calculate_rsi, get_prices, prices_to_df
 from langchain_openai.chat_models import ChatOpenAI
 import time
 import json
