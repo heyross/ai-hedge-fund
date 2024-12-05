@@ -54,10 +54,28 @@ class BaseAgent(ABC):
         """Handle incoming messages"""
         try:
             logger.debug(f"Agent {self.name} received message: {message}")
-            if not message["private"] or message["sender"] == self.agent_type:
+            
+            # Handle chat messages specifically
+            if message.get("type") == "chat":
+                await self.handle_chat(message)
+                return
+                
+            # Handle other messages if they're public or from this agent
+            if not message.get("private", False) or message.get("sender") == self.agent_type:
                 await self.handle_message(message)
         except Exception as e:
             logger.error(f"Error handling message in {self.name}: {e}", exc_info=True)
+
+    async def handle_chat(self, message: dict):
+        """Handle chat messages - can be overridden by subclasses"""
+        # Default implementation just acknowledges the message
+        response = f"Received your message. I am {self.name}."
+        await message_bus.publish(
+            sender=self.agent_type,
+            message_type="chat",
+            content=response,
+            private=False
+        )
 
     @abstractmethod
     async def handle_message(self, message: dict):
@@ -79,7 +97,7 @@ class BaseAgent(ABC):
             sender=self.agent_type,
             message_type="agent_thought",
             content=thought,
-            private=True
+            private=False  # Changed to false so thoughts appear in agent spaces
         )
 
     async def broadcast_message(self, content: Any, message_type: str = "info"):

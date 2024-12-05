@@ -34,7 +34,10 @@
 - [COMPLETE] Poetry setup
 - [COMPLETE] Environment configuration
 - [COMPLETE] Basic CLI interface
-- [PENDING] Logging system
+- [COMPLETE] Logging system
+  - All logs written to /logs directory in project root
+  - Separate files for debug, error, and trading logs
+  - Keep implementation simple and maintainable
 - [COMPLETE] Project structure
 
 ### Backtesting
@@ -229,6 +232,12 @@
 6. Build production monitoring system
 7. Develop automated reporting
 8. Create deployment automation
+
+## Development Philosophy
+- Keep implementations as simple as possible
+- Avoid premature optimization
+- Maintain clear, readable code over complex solutions
+- Focus on reliability and maintainability
 
 ## Risk Management
 

@@ -65,8 +65,17 @@ class ConnectionManager:
     async def _handle_message(self, message: dict):
         """Handle messages from the message bus"""
         logger.debug(f"Received message from bus: {message}")
-        # Forward message to all connected clients
-        await self.broadcast(message)
+        
+        # Only broadcast messages that should be displayed in UI
+        if message.get("type") in ["agent_thought", "agent_status", "chat", "market_data"]:
+            # For private messages, only show in specific areas
+            if message.get("private", False):
+                # Route agent thoughts and status to their specific spaces
+                if message["sender"] in self.active_connections:
+                    await self.send_private(message["sender"], message)
+            else:
+                # Broadcast public messages to all
+                await self.broadcast(message)
 
 manager = ConnectionManager()
 

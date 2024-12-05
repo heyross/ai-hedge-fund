@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import logging
 
 from src.tools import get_price_data
 from src.agents import run_hedge_fund
@@ -15,6 +16,7 @@ class Backtester:
         self.initial_capital = initial_capital
         self.portfolio = {"cash": initial_capital, "stock": 0}
         self.portfolio_values = []
+        self.logger = logging.getLogger(__name__)
 
     def parse_action(self, agent_output):
         try:
@@ -22,8 +24,8 @@ class Backtester:
             import json
             decision = json.loads(agent_output)
             return decision["action"], decision["quantity"]
-        except:
-            print(f"Error parsing action: {agent_output}")
+        except Exception as e:
+            self.logger.error(f"Error parsing action: {agent_output}")
             return "hold", 0
 
     def execute_trade(self, action, quantity, current_price):
@@ -54,9 +56,9 @@ class Backtester:
     def run_backtest(self):
         dates = pd.date_range(self.start_date, self.end_date, freq="B")
 
-        print("\nStarting backtest...")
-        print(f"{'Date':<12} {'Ticker':<6} {'Action':<6} {'Quantity':>8} {'Price':>8} {'Cash':>12} {'Stock':>8} {'Total Value':>12}")
-        print("-" * 70)
+        self.logger.info("\nStarting backtest...")
+        self.logger.info(f"{'Date':<12} {'Ticker':<6} {'Action':<6} {'Quantity':>8} {'Price':>8} {'Cash':>12} {'Stock':>8} {'Total Value':>12}")
+        self.logger.info("-" * 70)
 
         for current_date in dates:
             lookback_start = (current_date - timedelta(days=30)).strftime("%Y-%m-%d")
@@ -81,7 +83,7 @@ class Backtester:
             self.portfolio["portfolio_value"] = total_value
 
             # Log the current state with executed quantity
-            print(
+            self.logger.info(
                 f"{current_date.strftime('%Y-%m-%d'):<12} {self.ticker:<6} {action:<6} {executed_quantity:>8} {current_price:>8.2f} "
                 f"{self.portfolio['cash']:>12.2f} {self.portfolio['stock']:>8} {total_value:>12.2f}"
             )
@@ -96,10 +98,9 @@ class Backtester:
         performance_df = pd.DataFrame(self.portfolio_values).set_index("Date")
 
         # Calculate total return
-        total_return = (
-                           self.portfolio["portfolio_value"] - self.initial_capital
-                       ) / self.initial_capital
-        print(f"Total Return: {total_return * 100:.2f}%")
+        final_value = performance_df["Portfolio Value"].iloc[-1]
+        total_return = (final_value - self.initial_capital) / self.initial_capital
+        self.logger.info(f"Total Return: {total_return * 100:.2f}%")
 
         # Plot the portfolio value over time
         performance_df["Portfolio Value"].plot(
@@ -113,23 +114,23 @@ class Backtester:
         performance_df["Daily Return"] = performance_df["Portfolio Value"].pct_change()
 
         # Calculate Sharpe Ratio (assuming 252 trading days in a year)
-        mean_daily_return = performance_df["Daily Return"].mean()
-        std_daily_return = performance_df["Daily Return"].std()
-        sharpe_ratio = (mean_daily_return / std_daily_return) * (252 ** 0.5)
-        print(f"Sharpe Ratio: {sharpe_ratio:.2f}")
+        returns_mean = performance_df["Daily Return"].mean()
+        returns_std = performance_df["Daily Return"].std()
+        sharpe_ratio = returns_mean / returns_std if returns_std != 0 else 0
+        self.logger.info(f"Sharpe Ratio: {sharpe_ratio:.2f}")
 
         # Calculate Maximum Drawdown
         rolling_max = performance_df["Portfolio Value"].cummax()
         drawdown = performance_df["Portfolio Value"] / rolling_max - 1
         max_drawdown = drawdown.min()
-        print(f"Maximum Drawdown: {max_drawdown * 100:.2f}%")
+        self.logger.info(f"Maximum Drawdown: {max_drawdown * 100:.2f}%")
 
         return performance_df
-    
+
 ### 4. Run the Backtest #####
 if __name__ == "__main__":
     import argparse
-    
+
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Run backtesting simulation')
     parser.add_argument('--ticker', type=str, help='Stock ticker symbol (e.g., AAPL)')
