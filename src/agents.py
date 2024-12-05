@@ -80,8 +80,21 @@ class QuantitativeAgent(BaseAgent):
             if "prices" in self.state:
                 # Reconstruct DataFrame from the serialized format
                 prices_data = self.state["prices"]
-                df = pd.DataFrame(prices_data['data'])
-                df.index = pd.to_datetime(prices_data['index'])
+                
+                # Extract and parse the data correctly
+                df_data = prices_data['data']
+                
+                # Convert to DataFrame with correct datetime index
+                df = pd.DataFrame(df_data)
+                
+                # Handle complex index parsing
+                def parse_index(idx):
+                    # If index is a tuple, extract the timestamp
+                    if isinstance(idx, tuple):
+                        return idx[1]
+                    return idx
+                
+                df.index = pd.to_datetime([parse_index(idx) for idx in prices_data['index']])
                 
                 # Calculate technical indicators
                 bb_upper, bb_lower = calculate_bollinger_bands(df)
@@ -127,7 +140,7 @@ class QuantitativeAgent(BaseAgent):
                 await self.broadcast_thought("Technical analysis completed")
                 
         except Exception as e:
-            logger.error(f"Error in QuantitativeAgent: {e}")
+            logger.error(f"Error in QuantitativeAgent: {e}", exc_info=True)
             await self.broadcast_thought(f"Error: {str(e)}")
 
     async def handle_message(self, message: dict):
