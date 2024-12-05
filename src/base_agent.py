@@ -12,6 +12,7 @@ from typing import Dict, Any
 from dotenv import load_dotenv
 from src.llm_config import llm_config
 from src.user_profile import UserProfileManager
+import time
 
 # Load environment variables
 load_dotenv()
@@ -220,66 +221,36 @@ class BaseAgent(ABC):
         )
 
     async def _generate_thought(self, context: dict = None) -> str:
-        """
-        Generate a more comprehensive, context-aware thought process.
-        
-        Args:
-            context (dict, optional): Additional context for thought generation
-        
-        Returns:
-            str: Detailed thought process description
-        """
+        """Generate a thought with rate limiting and error handling."""
         try:
-            # Use role and context for more specific thought generation
-            current_role = self.role or self.__class__.__name__
+            # Add cooldown between thoughts
+            current_time = time.time()
+            if hasattr(self, '_last_thought_time'):
+                time_since_last = current_time - self._last_thought_time
+                if time_since_last < 10:  # Minimum 10 seconds between thoughts
+                    return None
             
-            # Prepare thought generation context
-            thought_context = {
-                "role": current_role,
-                "timestamp": datetime.now().isoformat(),
-                "current_context": context or {}
-            }
-            
-            # Attempt LLM-based thought generation
+            self._last_thought_time = current_time
+
             if self.llm_config:
                 try:
-                    # More detailed thought generation prompt
-                    thought_prompt = f"""
-                    You are a {current_role} agent in a trading system. 
-                    Generate a detailed, professional thought process that:
-                    1. Reflects on current context
-                    2. Identifies key insights or considerations
-                    3. Suggests potential next actions
-                    4. Maintains a collaborative, team-oriented perspective
-
-                    Context: {json.dumps(thought_context)}
-                    
-                    Format your response as a structured thought process.
-                    """
-                    
-                    thought = await self.llm_config.generate_text(thought_prompt)
-                    
-                    # Ensure thought is meaningful
-                    if not thought or len(thought.strip()) < 10:
-                        raise ValueError("Generated thought is too short")
-                    
-                    return thought.strip()
-                
-                except Exception as llm_error:
-                    logger.warning(f"LLM thought generation failed: {llm_error}")
+                    thought = await self.llm_config.generate_text(
+                        f"As {self.role}, analyze the current situation and share your thoughts."
+                    )
+                    if thought:
+                        return thought.strip()
+                except Exception as e:
+                    if "rate limit" in str(e).lower():
+                        logger.warning(f"Rate limit hit for {self.name}, using fallback thought")
+                    else:
+                        logger.error(f"Error generating thought for {self.name}: {e}")
             
-            # Fallback thought generation
-            fallback_thought = (
-                f"{current_role} agent is processing information. "
-                f"Key considerations include analyzing current market conditions, "
-                f"evaluating potential strategies, and preparing collaborative insights."
-            )
-            
-            return fallback_thought
+            # Fallback thought if LLM fails or is rate limited
+            return f"{self.role} is analyzing market conditions..."
 
         except Exception as e:
             logger.error(f"Unexpected error in thought generation for {self.name}: {e}")
-            return f"Continuing standard operations for {self.name}."
+            return None
 
     async def generate_contextual_thought(self, context: dict = None) -> str:
         """

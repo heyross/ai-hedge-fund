@@ -1,0 +1,14 @@
+2024-12-05 08:47:18,038 - root - ERROR - [logging_config.py:83] - Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 334, in _bootstrap
+    util._flush_std_streams()
+  File "C:\Users\Ross Brown\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\util.py", line 435, in _flush_std_streams
+    sys.stdout.flush()
+OSError: [Errno 22] Invalid argument

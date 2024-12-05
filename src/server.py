@@ -1,15 +1,15 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pathlib import Path
 import json
 import asyncio
 from typing import Dict
 import logging
-from src.message_bus import message_bus
-from src.trading_system import TradingSystem
+from message_bus import message_bus
+from trading_system import TradingSystem
 from datetime import datetime
-from src.logging_config import setup_logging
+from logging_config import setup_logging
 
 # Initialize logging
 setup_logging()
@@ -34,69 +34,74 @@ class ConnectionManager:
         asyncio.create_task(self._subscribe_to_message_bus())
 
     async def _subscribe_to_message_bus(self):
-        await message_bus.subscribe("ui", self._handle_message)
-        logger.info("ConnectionManager subscribed to message bus")
+        try:
+            logger.info("ConnectionManager subscribing to message bus")
+            await message_bus.subscribe(self._handle_message)
+            logger.info("Successfully subscribed to message bus")
+        except Exception as e:
+            logger.error(f"Error subscribing to message bus: {e}")
 
     async def connect(self, websocket: WebSocket, client_id: str):
-        await websocket.accept()
-        self.active_connections[client_id] = websocket
-        logger.info(f"Client {client_id} connected")
+        try:
+            await websocket.accept()
+            self.active_connections[client_id] = websocket
+            logger.info(f"Client {client_id} connected")
+        except Exception as e:
+            logger.error(f"Error accepting WebSocket connection: {e}")
+            raise
 
-    def disconnect(self, client_id: str):
-        if client_id in self.active_connections:
-            del self.active_connections[client_id]
-            logger.info(f"Client {client_id} disconnected")
+    async def disconnect(self, client_id: str):
+        try:
+            if client_id in self.active_connections:
+                del self.active_connections[client_id]
+                logger.info(f"Client {client_id} disconnected")
+        except Exception as e:
+            logger.error(f"Error disconnecting client {client_id}: {e}")
 
     async def broadcast(self, message: dict):
-        logger.debug(f"Broadcasting message: {message}")
-        for connection in self.active_connections.values():
-            try:
-                await connection.send_json(message)
-            except Exception as e:
-                logger.error(f"Error broadcasting message: {e}")
+        try:
+            for client_id, connection in list(self.active_connections.items()):
+                try:
+                    await connection.send_json(message)
+                except Exception as e:
+                    logger.error(f"Error sending message to client {client_id}: {e}")
+                    await self.disconnect(client_id)
+        except Exception as e:
+            logger.error(f"Error broadcasting message: {e}")
 
     async def send_private(self, client_id: str, message: dict):
-        if client_id in self.active_connections:
-            try:
+        try:
+            if client_id in self.active_connections:
                 await self.active_connections[client_id].send_json(message)
-            except Exception as e:
-                logger.error(f"Error sending private message: {e}")
+        except Exception as e:
+            logger.error(f"Error sending private message to client {client_id}: {e}")
+            await self.disconnect(client_id)
 
     async def _handle_message(self, message: dict):
-        """Handle messages from the message bus"""
-        logger.debug(f"Received message from bus: {message}")
-        
-        # Debug logging for message filtering
-        logger.debug(f"Message type: {message.get('type')}")
-        logger.debug(f"Message private status: {message.get('private', False)}")
-        logger.debug(f"Active connections: {list(self.active_connections.keys())}")
-        
-        # Only broadcast messages that should be displayed in UI
-        if message.get("type") in ["agent_thought", "agent_status", "chat", "market_data", "system_message"]:
-            # For private messages, only show in specific areas
-            if message.get("private", False):
-                # Route agent thoughts and status to their specific spaces
-                if message["sender"] in self.active_connections:
-                    logger.debug(f"Sending private message to {message['sender']}")
-                    await self.send_private(message["sender"], message)
-            else:
-                # Broadcast public messages to all
-                logger.debug("Broadcasting public message")
-                await self.broadcast(message)
+        try:
+            logger.debug(f"Handling message from bus: {message}")
+            await self.broadcast(message)
+        except Exception as e:
+            logger.error(f"Error handling message from bus: {e}")
 
 manager = ConnectionManager()
 
 # Routes
 @app.get("/")
 async def get_index():
-    return FileResponse(static_path / "index.html")
+    try:
+        return FileResponse(static_path / "index.html")
+    except Exception as e:
+        logger.error(f"Error serving index.html: {e}")
+        return HTMLResponse("Error loading application")
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     client_id = str(id(websocket))
-    await manager.connect(websocket, client_id)
-    
     try:
+        await manager.connect(websocket, client_id)
+        logger.info(f"WebSocket connection established for client {client_id}")
+        
         # Send initial system status
         await websocket.send_json({
             "type": "system_status",
@@ -104,80 +109,73 @@ async def websocket_endpoint(websocket: WebSocket):
         })
         
         while True:
-            message = await websocket.receive_text()
-            data = json.loads(message)
-            logger.debug(f"Received WebSocket message: {data}")
-            
-            if data["type"] == "command":
-                if data["action"] == "start" and not manager.system_running:
-                    manager.system_running = True
-                    await manager.broadcast({
-                        "type": "system_status",
-                        "data": {"running": True}
-                    })
-                    await trading_system.start()
-                    
-                elif data["action"] == "stop" and manager.system_running:
-                    manager.system_running = False
-                    await manager.broadcast({
-                        "type": "system_status",
-                        "data": {"running": False}
-                    })
-                    await trading_system.stop()
-            
-            elif data["type"] == "user_message":
-                logger.info(f"User message: {data['content']}")
-                # Echo back to all clients including sender
-                await manager.broadcast({
-                    "type": "user_message",
-                    "sender": "You",
-                    "content": data["content"],
-                    "timestamp": datetime.now().isoformat(),
-                    "category": "user"
-                })
-                # Forward to message bus for agent processing
-                try:
-                    await message_bus.publish(
-                        sender="user",
-                        message_type="user_message",
-                        content=data["content"],
-                        private=False
-                    )
-                except Exception as e:
-                    logger.error(f"Error publishing user message to message bus: {e}")
-                    # Optionally send an error message back to the client
-                    await websocket.send_json({
-                        "type": "error",
-                        "message": "Failed to process your message"
-                    })
-            
-            elif data["type"] == "agent_thought":
-                # Broadcast agent thoughts to all connected clients
-                logger.info(f"Agent thought received: {data}")
-                await manager.broadcast({
-                    "type": "agent_thought",
-                    "role": data.get("role", "unknown"),
-                    "thought": data.get("content", ""),
-                    "timestamp": datetime.now().isoformat()
-                })
+            try:
+                message = await websocket.receive_text()
+                data = json.loads(message)
+                logger.debug(f"Received WebSocket message: {data}")
                 
-                # Optionally log or process the thought further
-                try:
-                    await message_bus.publish(
-                        sender=data.get("role", "agent"),
-                        message_type="agent_thought",
-                        content=data.get("content", ""),
-                        private=False
-                    )
-                except Exception as e:
-                    logger.error(f"Error processing agent thought: {e}")
+                if data["type"] == "command":
+                    if data["action"] == "start" and not manager.system_running:
+                        manager.system_running = True
+                        await manager.broadcast({
+                            "type": "system_status",
+                            "data": {"running": True}
+                        })
+                        await trading_system.start()
+                        
+                    elif data["action"] == "stop" and manager.system_running:
+                        manager.system_running = False
+                        await manager.broadcast({
+                            "type": "system_status",
+                            "data": {"running": False}
+                        })
+                        await trading_system.stop()
+                
+                elif data["type"] == "user_message":
+                    logger.info(f"User message: {data['content']}")
+                    # Echo back to all clients including sender
+                    await manager.broadcast({
+                        "type": "user_message",
+                        "sender": "You",
+                        "content": data["content"],
+                        "timestamp": datetime.now().isoformat(),
+                        "category": "user"
+                    })
+                    
+                    # Forward to message bus for agent processing
+                    try:
+                        await message_bus.publish(
+                            sender="user",
+                            message_type="user_message",
+                            content=data["content"],
+                            private=False
+                        )
+                    except Exception as e:
+                        logger.error(f"Error publishing user message to message bus: {e}")
+                        await websocket.send_json({
+                            "type": "error",
+                            "message": "Failed to process your message. Please try again."
+                        })
+            
+            except json.JSONDecodeError:
+                logger.error(f"Invalid JSON received from client {client_id}")
+                await websocket.send_json({
+                    "type": "error",
+                    "message": "Invalid message format"
+                })
+            except Exception as e:
+                logger.error(f"Error processing message from client {client_id}: {e}")
+                await websocket.send_json({
+                    "type": "error",
+                    "message": "An error occurred processing your request"
+                })
                 
     except WebSocketDisconnect:
-        logger.info(f"Client {client_id} disconnected")
-        manager.disconnect(client_id)
+        logger.info(f"WebSocket client {client_id} disconnected normally")
     except Exception as e:
-        logger.error(f"WebSocket error: {e}")
-        manager.disconnect(client_id)
+        logger.error(f"WebSocket error for client {client_id}: {e}")
+    finally:
+        await manager.disconnect(client_id)
 
 @app.on_event("startup")
 async def startup_event():
