@@ -33,8 +33,15 @@ class MarketDataAgent(BaseAgent):
                               self.state.get("end_date"))
             
             if prices is not None:
+                # Convert the prices DataFrame to a serializable format
+                prices_dict = {}
+                for column in prices.columns:
+                    prices_dict[column] = {
+                        str(idx): val for idx, val in prices[column].items()
+                    }
+                
                 await self.broadcast_message({
-                    "prices": prices.to_dict(),
+                    "prices": prices_dict,
                     "timestamp": datetime.now().isoformat()
                 }, "market_data")
                 

@@ -1,0 +1,35 @@
+2024-12-05 00:00:00,023 - src.server - INFO - [server.py:140] - Client 2120380622768 disconnected
+2024-12-05 00:00:00,025 - src.server - INFO - [server.py:48] - Client 2120380622768 disconnected
+2024-12-05 00:00:00,131 - src.message_bus - INFO - [message_bus.py:92] - Stopping message bus
+2024-12-05 00:00:00,132 - src.message_bus - INFO - [message_bus.py:100] - Message bus stopped
+2024-12-05 00:00:33,386 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:00:33,387 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 00:00:33,390 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:00:35,446 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 00:00:35,448 - src.trading_system - INFO - [trading_system.py:19] - Trading system initialized
+2024-12-05 00:00:35,450 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 00:00:35,451 - src.message_bus - INFO - [message_bus.py:47] - Starting message bus
+2024-12-05 00:00:37,362 - src.server - INFO - [server.py:43] - Client 2531505707712 connected
+2024-12-05 00:00:47,142 - src.server - INFO - [server.py:140] - Client 2531505707712 disconnected
+2024-12-05 00:00:47,143 - src.server - INFO - [server.py:48] - Client 2531505707712 disconnected
+2024-12-05 00:00:47,518 - src.server - INFO - [server.py:43] - Client 2531505710112 connected
+2024-12-05 00:00:50,112 - src.trading_system - INFO - [trading_system.py:28] - Starting trading system
+2024-12-05 00:00:50,113 - src.base_agent - INFO - [base_agent.py:28] - Agent Market Data Agent started
+2024-12-05 00:00:50,113 - src.trading_system - INFO - [trading_system.py:34] - Started market_data agent
+2024-12-05 00:00:50,114 - src.base_agent - INFO - [base_agent.py:28] - Agent Quantitative Agent started
+2024-12-05 00:00:50,115 - src.trading_system - INFO - [trading_system.py:34] - Started quantitative agent
+2024-12-05 00:00:50,115 - src.base_agent - INFO - [base_agent.py:28] - Agent Risk Management Agent started
+2024-12-05 00:00:50,117 - src.trading_system - INFO - [trading_system.py:34] - Started risk_management agent
+2024-12-05 00:00:50,117 - src.base_agent - INFO - [base_agent.py:28] - Agent Portfolio Management Agent started
+2024-12-05 00:00:50,118 - src.trading_system - INFO - [trading_system.py:34] - Started portfolio_management agent
+2024-12-05 00:01:09,178 - src.trading_system - INFO - [trading_system.py:54] - Stopping trading system
+2024-12-05 00:01:09,178 - src.base_agent - INFO - [base_agent.py:34] - Agent Market Data Agent stopped
+2024-12-05 00:01:09,179 - src.trading_system - INFO - [trading_system.py:60] - Stopped market_data agent
+2024-12-05 00:01:09,180 - src.base_agent - INFO - [base_agent.py:34] - Agent Quantitative Agent stopped
+2024-12-05 00:01:09,180 - src.trading_system - INFO - [trading_system.py:60] - Stopped quantitative agent
+2024-12-05 00:01:09,181 - src.base_agent - INFO - [base_agent.py:34] - Agent Risk Management Agent stopped
+2024-12-05 00:01:09,181 - src.trading_system - INFO - [trading_system.py:60] - Stopped risk_management agent
+2024-12-05 00:01:09,182 - src.base_agent - INFO - [base_agent.py:34] - Agent Portfolio Management Agent stopped
+2024-12-05 00:01:09,182 - src.trading_system - INFO - [trading_system.py:60] - Stopped portfolio_management agent
+2024-12-05 00:01:09,184 - src.server - INFO - [server.py:122] - User message: Hi
+2024-12-05 00:01:09,388 - src.server - ERROR - [server.py:56] - Error broadcasting message: keys must be str, int, float, bool or None, not tuple

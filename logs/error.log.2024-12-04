@@ -1,0 +1,5 @@
+2024-12-04 23:59:49,231 - src.server - ERROR - [server.py:56] - Error broadcasting message: keys must be str, int, float, bool or None, not tuple
+2024-12-04 23:59:50,035 - src.agents - ERROR - [agents.py:113] - Error in QuantitativeAgent: 'dict' object has no attribute 'index'
+2024-12-04 23:59:51,050 - src.agents - ERROR - [agents.py:113] - Error in QuantitativeAgent: 'dict' object has no attribute 'index'
+2024-12-04 23:59:52,067 - src.agents - ERROR - [agents.py:113] - Error in QuantitativeAgent: 'dict' object has no attribute 'index'
+2024-12-04 23:59:53,068 - src.agents - ERROR - [agents.py:113] - Error in QuantitativeAgent: 'dict' object has no attribute 'index'
