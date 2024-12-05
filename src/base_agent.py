@@ -10,6 +10,7 @@ import os
 import logging
 from typing import Dict, Any
 from dotenv import load_dotenv
+from src.llm_config import llm_config
 
 # Load environment variables
 load_dotenv()
@@ -17,9 +18,6 @@ load_dotenv()
 # Initialize logging
 setup_logging()
 logger = logging.getLogger(__name__)
-
-# Add LLM configuration import
-from src.agents import llm_config
 
 class BaseAgent(ABC):
     def __init__(self, name: str, agent_type: str):

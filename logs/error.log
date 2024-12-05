@@ -1,0 +1,4 @@
+2024-12-05 00:21:04,265 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:05,276 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:06,262 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
+2024-12-05 00:21:07,279 - src.agents - ERROR - [agents.py:130] - Error in QuantitativeAgent: Unknown datetime string format, unable to parse: ('AAPL', Timestamp('2023-01-03 05:00:00+0000', tz='UTC')), at position 0
