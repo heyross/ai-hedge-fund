@@ -1,0 +1,34 @@
+2024-12-05 01:17:21,008 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:17:21,009 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:17:21,009 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 01:17:22,879 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:17:22,880 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:17:23,517 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:17:23,518 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:17:23,519 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:17:24,306 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:17:25,201 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:17:25,951 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:17:26,694 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 01:17:26,696 - src.message_bus - DEBUG - [message_bus.py:50] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 01:17:26,697 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 01:17:26,697 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 01:18:08,620 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 01:18:08,621 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
+2024-12-05 01:21:18,569 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:21:18,570 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:21:18,570 - src.message_bus - INFO - [message_bus.py:23] - MessageBus initialized
+2024-12-05 01:21:20,270 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:21:20,271 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:21:20,919 - root - INFO - [logging_config.py:89] - Logging system initialized
+2024-12-05 01:21:20,920 - root - DEBUG - [logging_config.py:90] - Log directory: C:\Users\Ross Brown\OneDrive\Documents\GitHub\Shepard\ai-hedge-fund\logs
+2024-12-05 01:21:20,921 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:21:21,778 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:21:22,555 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:21:23,350 - LLMConfig - INFO - [llm_config.py:24] - Using OpenAI model
+2024-12-05 01:21:24,112 - src.trading_system - INFO - [trading_system.py:29] - Trading system initialized for user: Trader
+2024-12-05 01:21:24,114 - src.message_bus - DEBUG - [message_bus.py:50] - Added subscriber for ui. Total subscribers: 1
+2024-12-05 01:21:24,115 - src.server - INFO - [server.py:38] - ConnectionManager subscribed to message bus
+2024-12-05 01:21:24,115 - src.message_bus - INFO - [message_bus.py:67] - Starting message bus
+2024-12-05 01:21:57,645 - src.message_bus - INFO - [message_bus.py:112] - Stopping message bus
+2024-12-05 01:21:57,645 - src.message_bus - INFO - [message_bus.py:120] - Message bus stopped
