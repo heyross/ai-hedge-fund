@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  ai-hedge-fund:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ALPACA_API_KEY=${ALPACA_API_KEY}
+      - ALPACA_SECRET_KEY=${ALPACA_SECRET_KEY}
+      - ALPACA_PAPER_ENDPOINT=${ALPACA_PAPER_ENDPOINT}
+      - ALPACA_LIVE_ENDPOINT=${ALPACA_LIVE_ENDPOINT}
+    command: poetry run python src/agents.py --ticker AAPL --show-reasoning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('https://paper-api.alpaca.markets/v2/account')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
