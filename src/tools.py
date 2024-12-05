@@ -1,7 +1,7 @@
 import os
-from datetime import datetime, timedelta
-
+from dotenv import load_dotenv
 import pandas as pd
+from datetime import datetime, timedelta
 from alpaca.data import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
@@ -9,11 +9,17 @@ from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 
+# Load environment variables
+load_dotenv()
+
 # Initialize Alpaca clients
-ALPACA_API_KEY = os.environ.get("ALPACA_API_KEY")
-ALPACA_SECRET_KEY = os.environ.get("ALPACA_SECRET_KEY")
-ALPACA_PAPER_ENDPOINT = os.environ.get("ALPACA_PAPER_ENDPOINT", "https://paper-api.alpaca.markets")
-ALPACA_LIVE_ENDPOINT = os.environ.get("ALPACA_LIVE_ENDPOINT", "https://api.alpaca.markets")
+ALPACA_API_KEY = os.getenv('ALPACA_API_KEY')
+ALPACA_SECRET_KEY = os.getenv('ALPACA_SECRET_KEY')
+ALPACA_PAPER_ENDPOINT = os.getenv('ALPACA_PAPER_ENDPOINT', "https://paper-api.alpaca.markets")
+ALPACA_LIVE_ENDPOINT = os.getenv('ALPACA_LIVE_ENDPOINT', "https://api.alpaca.markets")
+
+if not ALPACA_API_KEY or not ALPACA_SECRET_KEY:
+    raise ValueError("Alpaca API credentials not found in environment variables")
 
 # Initialize clients
 data_client = StockHistoricalDataClient(ALPACA_API_KEY, ALPACA_SECRET_KEY)
