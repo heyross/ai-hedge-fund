@@ -11,6 +11,7 @@ import logging
 from typing import Dict, Any
 from dotenv import load_dotenv
 from src.llm_config import llm_config
+from src.user_profile import UserProfileManager
 
 # Load environment variables
 load_dotenv()
@@ -29,7 +30,8 @@ class BaseAgent(ABC):
             user_name (str, optional): Name of the user interacting with the system
         """
         self.name = name or self.__class__.__name__
-        self.user_name = user_name or "Trader"
+        # Prioritize passed user_name, then check profile, default to 'Trader'
+        self.user_name = user_name or UserProfileManager.get_user_name()
         self.agent_type = self.name.lower().replace("agent", "")
         
         # Logging setup
@@ -48,8 +50,12 @@ class BaseAgent(ABC):
         Args:
             user_name (str, optional): Update user name if provided
         """
+        # Update user name if provided or fetch from profile
         if user_name:
             self.user_name = user_name
+            UserProfileManager.save_user_name(user_name)
+        else:
+            self.user_name = UserProfileManager.get_user_name()
         
         # Announce agent is online
         await self.broadcast_message(
@@ -148,6 +154,20 @@ class BaseAgent(ABC):
             # Extract message content and sender
             content = message.get("content", "")
             sender = message.get("sender", "Unknown")
+
+            # Check for user name update
+            if content.lower().startswith("my name is "):
+                new_name = content[11:].strip()
+                UserProfileManager.save_user_name(new_name)
+                self.user_name = new_name
+                
+                await self.broadcast_thought(
+                    f"Nice to meet you, {new_name}! I'll remember your name for our future interactions.",
+                    private=False
+                )
+            
+            # Update last interaction timestamp
+            UserProfileManager.update_last_interaction()
 
             # Generate a contextual response using the LLM
             try:

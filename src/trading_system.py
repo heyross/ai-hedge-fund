@@ -4,6 +4,7 @@ from typing import Dict, List
 from src.base_agent import BaseAgent
 from src.agents import MarketDataAgent, QuantitativeAgent, RiskManagementAgent, PortfolioManagementAgent
 from src.message_bus import message_bus
+from src.user_profile import UserProfileManager
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,9 @@ class TradingSystem:
         Args:
             user_name (str, optional): Name of the user interacting with the system
         """
-        self.user_name = user_name or "Trader"
+        # Use provided user_name or fetch from profile
+        self.user_name = user_name or UserProfileManager.get_user_name()
+        
         self.agents: Dict[str, BaseAgent] = {
             "market_data": MarketDataAgent(user_name=self.user_name),
             "quantitative": QuantitativeAgent(user_name=self.user_name),
@@ -34,7 +37,8 @@ class TradingSystem:
         """
         if user_name:
             self.user_name = user_name
-            # Update user name for all agents
+            # Save to profile and update all agents
+            UserProfileManager.save_user_name(user_name)
             for agent in self.agents.values():
                 await agent.initialize(user_name=self.user_name)
 
