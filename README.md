@@ -28,7 +28,7 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions wit
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/hey_r/ai-hedge-fund.git
+git clone https://github.com/heyross/ai-hedge-fund.git
 cd ai-hedge-fund
 ```
 
