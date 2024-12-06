@@ -69,9 +69,26 @@ if %errorLevel% neq 0 (
 )
 
 echo Installing data science packages...
-pip install --verbose "numpy>=1.25.0,<2.0.0" matplotlib==3.9.2 pandas==2.2.0 >> pip_install.log 2>&1
+echo Installing numpy...
+pip install --verbose "numpy>=1.25.0,<2.0.0" >> pip_install.log 2>&1
 if %errorLevel% neq 0 (
-    echo Failed to install data science packages. Check pip_install.log for details
+    echo Failed to install numpy. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing matplotlib...
+pip install --verbose matplotlib==3.9.2 >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install matplotlib. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing pandas...
+pip install --verbose pandas==2.2.0 >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install pandas. Check pip_install.log for details
     pause
     exit /b 1
 )
