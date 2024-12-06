@@ -28,7 +28,7 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions wit
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/ai-hedge-fund.git
+git clone https://github.com/hey_r/ai-hedge-fund.git
 cd ai-hedge-fund
 ```
 
@@ -90,7 +90,7 @@ python src/agents.py --check-setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/ai-hedge-fund.git
+   git clone https://github.com/hey_r/ai-hedge-fund.git
    cd ai-hedge-fund
    ```
 
@@ -152,7 +152,7 @@ python src/agents.py --check-setup
 
 Clone the repository:
 ```bash
-git clone https://github.com/your-repo/ai-hedge-fund.git
+git clone https://github.com/hey_r/ai-hedge-fund.git
 cd ai-hedge-fund
 ```
 
