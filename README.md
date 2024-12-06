@@ -1,6 +1,8 @@
-# AI Hedge Fund
+#Automated AI Hedge Fund with UX  
 
-An AI-powered hedge fund that uses multiple agents to make trading decisions. The system employs several specialized agents working together:
+This is a forked version of the stellar project from viratt located at https://github.com/virattt/ai-hedge-fund.  I forked it as I wanted to build some customization and a UX for it, as well as improve some of the trading capabilities, hence the fork.  Please take any ideas from here and include in your builds if you like, but his project is the source for the agentic models - go support him
+
+An AI-powered hedge fund that uses multiple agents to make trading decisions with an argumentitive chat room you can engage with. The system employs several specialized agents working together:
 
 1. Market Data Agent - Gathers and preprocesses market data
 2. Quantitative Agent - Analyzes technical indicators and generates trading signals
@@ -9,26 +11,86 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions. Th
 
 ## Prerequisites
 
-### Required Software
-- Python 3.9 or higher
-- Docker Desktop
-- Git
+### System Requirements
+- Operating System: Windows 10/11 (64-bit)
+- Python: Version 3.10 or higher
+- Minimum Hardware:
+  - 16GB RAM recommended
+  - 50GB free disk space
+  - Administrative privileges for installation
 
-### Python Package Management
-- Poetry (Python package manager)
-  ```bash
-  # Install Poetry
-  python -m pip install poetry
-  
-  # Configure Poetry to create virtualenvs in project directory
-  poetry config virtualenvs.in-project true
-  ```
+### Required Software
+- Python 3.10+ (64-bit)
+- Git
+- Windows PowerShell or Command Prompt with administrative privileges
+
+## Installation Guide
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/heyross/ai-hedge-fund.git
+cd ai-hedge-fund
+```
+
+### 2. Installation Methods
+
+#### Option A: Automated Installation (Recommended)
+Run the installation script with administrative privileges:
+```bash
+cd scripts
+install.bat
+```
+
+#### Option B: Manual Installation
+1. Create a virtual environment:
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
+
+### Installation Checks
+The installation script performs the following checks:
+- Verifies administrative privileges
+- Checks Python installation and version
+- Creates a virtual environment
+- Installs core dependencies
+- Sets up data science packages
+- Configures API and AI packages
+
+### Troubleshooting
+- Ensure you have administrative rights
+- Verify Python 3.10+ is installed and in PATH
+- Check `pip_install.log` and `install_script.log` for detailed error messages
+
+### Post-Installation Setup
+1. Copy `.env.example` to `.env`
+2. Fill in required API keys:
+   - OpenAI API Key
+   - Alpaca Trading API Keys
+   - Other necessary credentials
+
+## Verification
+After installation, you can verify the setup by running:
+```bash
+python src/agents.py --check-setup
+```
+
+## Common Issues
+- **Python Not Found**: Ensure Python 3.10+ is installed and added to PATH
+- **Dependency Conflicts**: Use the provided `requirements.txt`
+- **Permission Errors**: Run installation script as Administrator
 
 ## Development Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/ai-hedge-fund.git
+   git clone https://github.com/hey_r/ai-hedge-fund.git
    cd ai-hedge-fund
    ```
 
@@ -90,7 +152,7 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions. Th
 
 Clone the repository:
 ```bash
-git clone https://github.com/your-repo/ai-hedge-fund.git
+git clone https://github.com/hey_r/ai-hedge-fund.git
 cd ai-hedge-fund
 ```
 
@@ -211,6 +273,99 @@ You can optionally specify the start and end dates to backtest over a specific t
 poetry run python src/backtester.py --ticker AAPL --start-date 2024-01-01 --end-date 2024-03-01
 ```
 
+## Project Status
+
+### Current Development Progress
+
+#### Completed Features
+- Market Data Agent
+  - Basic market data retrieval
+  - Data preprocessing pipeline
+  - Historical data access
+
+- Quantitative Agent
+  - MACD implementation
+  - RSI implementation
+  - Bollinger Bands implementation
+  - OBV implementation
+  - Basic signal generation
+
+- Risk Management Agent
+  - Position sizing calculations
+  - Risk scoring system
+  - Maximum position limits
+  - Basic reasoning output
+
+- Portfolio Management Agent
+  - Basic trading decisions
+  - Order generation
+  - Multi-agent integration
+  - Decision reasoning output
+
+- System Infrastructure
+  - Poetry setup
+  - Environment configuration
+  - Basic CLI interface
+  - Logging system
+  - Project structure
+  - Installation scripts
+  - Environment management
+
+- Backtesting
+  - Basic backtesting functionality
+  - Performance tracking
+  - Transaction logging
+
+### Upcoming Development Priorities
+
+#### Next Steps
+1. Implement Real-time Data Streaming
+2. Develop Advanced Indicator Combinations
+3. Enhance Risk Management Metrics
+4. Create Portfolio Rebalancing Mechanism
+5. Integrate Sentiment Analysis
+6. Set Up Advanced Logging and Monitoring
+7. Develop Automated Testing Suite
+
+#### Pending Features
+- Real-time market data streaming
+- Advanced risk metrics
+- Portfolio rebalancing
+- Sentiment analysis integration
+- Web interface
+- Performance optimization
+- Database integration
+- Automated testing suite
+
+### Infrastructure Roadmap
+
+#### Docker and Containerization
+- [x] Create Dockerfile
+- [x] Docker Compose setup
+- [ ] Container orchestration
+- [ ] Local testing suite
+
+#### Cloud Deployment
+- [ ] Cloud provider selection
+- [ ] Infrastructure as Code (IaC)
+- [ ] CI/CD Pipeline
+- [ ] Monitoring and Logging setup
+
+### Trading Environment
+
+#### Paper Trading
+- [x] Paper trading API setup
+- [x] Paper trading client implementation
+- [ ] Performance tracking
+- [ ] Strategy validation framework
+
+#### Production Trading
+- [x] Live trading API setup
+- [x] Live trading client implementation
+- [ ] Production deployment checklist
+- [ ] Production monitoring system
+- [ ] Alert system for trade execution
+
 ## Project Structure
 ```
 ai-hedge-fund/
@@ -225,11 +380,7 @@ ai-hedge-fund/
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ## License
 

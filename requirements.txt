@@ -1,0 +1,25 @@
+# Base Requirements
+pip>=23.3.0
+setuptools>=68.0.0
+wheel>=0.40.0
+
+# Core Dependencies
+psutil>=5.9.0
+python-dotenv>=1.0.0
+
+# Data Science Packages
+numpy>=1.25.0,<2.0.0
+matplotlib==3.9.2
+pandas==2.2.0
+
+# API Packages
+fastapi==0.95.1
+uvicorn==0.22.0
+
+# AI Packages
+langchain==0.0.350
+langchain-openai==0.0.2
+langchain-community==0.0.21
+
+# Additional Recommended Packages
+# Add any additional packages that might be required for the project
