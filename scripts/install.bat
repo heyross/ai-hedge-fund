@@ -1,6 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: Enable verbose output
+set PIP_VERBOSE=1
+set PIP_LOG=pip_install.log
+
 :: Check for administrative privileges
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -47,21 +51,52 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-:: Install required packages
-echo Installing required packages...
-python -m pip install --upgrade pip
-pip install psutil
+:: Install packages in stages
+echo Installing base requirements...
+python -m pip install --upgrade pip setuptools wheel --verbose > pip_install.log 2>&1
 if %errorLevel% neq 0 (
-    echo Failed to install required packages.
+    echo Failed to install base requirements. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing core dependencies...
+pip install --verbose psutil python-dotenv >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install core dependencies. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing data science packages...
+pip install --verbose "numpy>=1.25.0,<2.0.0" matplotlib==3.9.2 pandas==2.2.0 >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install data science packages. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing API packages...
+pip install --verbose fastapi==0.95.1 uvicorn==0.22.0 >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install API packages. Check pip_install.log for details
+    pause
+    exit /b 1
+)
+
+echo Installing AI packages...
+pip install --verbose langchain==0.0.350 langchain-openai==0.0.2 langchain-community==0.0.21 >> pip_install.log 2>&1
+if %errorLevel% neq 0 (
+    echo Failed to install AI packages. Check pip_install.log for details
     pause
     exit /b 1
 )
 
 :: Run the installation script
 echo Running installation script...
-python scripts\install.py
+python "%~dp0install.py" > install_script.log 2>&1
 if %errorLevel% neq 0 (
-    echo Installation failed. Please check the error messages above.
+    echo Installation failed. Please check install_script.log for details.
     pause
     exit /b 1
 )
