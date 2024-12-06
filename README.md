@@ -211,6 +211,99 @@ You can optionally specify the start and end dates to backtest over a specific t
 poetry run python src/backtester.py --ticker AAPL --start-date 2024-01-01 --end-date 2024-03-01
 ```
 
+## Project Status
+
+### Current Development Progress
+
+#### Completed Features
+- Market Data Agent
+  - Basic market data retrieval
+  - Data preprocessing pipeline
+  - Historical data access
+
+- Quantitative Agent
+  - MACD implementation
+  - RSI implementation
+  - Bollinger Bands implementation
+  - OBV implementation
+  - Basic signal generation
+
+- Risk Management Agent
+  - Position sizing calculations
+  - Risk scoring system
+  - Maximum position limits
+  - Basic reasoning output
+
+- Portfolio Management Agent
+  - Basic trading decisions
+  - Order generation
+  - Multi-agent integration
+  - Decision reasoning output
+
+- System Infrastructure
+  - Poetry setup
+  - Environment configuration
+  - Basic CLI interface
+  - Logging system
+  - Project structure
+  - Installation scripts
+  - Environment management
+
+- Backtesting
+  - Basic backtesting functionality
+  - Performance tracking
+  - Transaction logging
+
+### Upcoming Development Priorities
+
+#### Next Steps
+1. Implement Real-time Data Streaming
+2. Develop Advanced Indicator Combinations
+3. Enhance Risk Management Metrics
+4. Create Portfolio Rebalancing Mechanism
+5. Integrate Sentiment Analysis
+6. Set Up Advanced Logging and Monitoring
+7. Develop Automated Testing Suite
+
+#### Pending Features
+- Real-time market data streaming
+- Advanced risk metrics
+- Portfolio rebalancing
+- Sentiment analysis integration
+- Web interface
+- Performance optimization
+- Database integration
+- Automated testing suite
+
+### Infrastructure Roadmap
+
+#### Docker and Containerization
+- [x] Create Dockerfile
+- [x] Docker Compose setup
+- [ ] Container orchestration
+- [ ] Local testing suite
+
+#### Cloud Deployment
+- [ ] Cloud provider selection
+- [ ] Infrastructure as Code (IaC)
+- [ ] CI/CD Pipeline
+- [ ] Monitoring and Logging setup
+
+### Trading Environment
+
+#### Paper Trading
+- [x] Paper trading API setup
+- [x] Paper trading client implementation
+- [ ] Performance tracking
+- [ ] Strategy validation framework
+
+#### Production Trading
+- [x] Live trading API setup
+- [x] Live trading client implementation
+- [ ] Production deployment checklist
+- [ ] Production monitoring system
+- [ ] Alert system for trade execution
+
 ## Project Structure
 ```
 ai-hedge-fund/
@@ -225,11 +318,7 @@ ai-hedge-fund/
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ## License
 
