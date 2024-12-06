@@ -1,6 +1,8 @@
-# AI Hedge Fund
+#Automated AI Hedge Fund with UX  
 
-An AI-powered hedge fund that uses multiple agents to make trading decisions. The system employs several specialized agents working together:
+This is a forked version of the stellar project from viratt located at https://github.com/virattt/ai-hedge-fund.  I forked it as I wanted to build some customization and a UX for it, as well as improve some of the trading capabilities, hence the fork.  Please take any ideas from here and include in your builds if you like, but his project is the source for the agentic models - go support him
+
+An AI-powered hedge fund that uses multiple agents to make trading decisions with an argumentitive chat room you can engage with. The system employs several specialized agents working together:
 
 1. Market Data Agent - Gathers and preprocesses market data
 2. Quantitative Agent - Analyzes technical indicators and generates trading signals
