@@ -9,20 +9,80 @@ An AI-powered hedge fund that uses multiple agents to make trading decisions. Th
 
 ## Prerequisites
 
-### Required Software
-- Python 3.9 or higher
-- Docker Desktop
-- Git
+### System Requirements
+- Operating System: Windows 10/11 (64-bit)
+- Python: Version 3.10 or higher
+- Minimum Hardware:
+  - 16GB RAM recommended
+  - 50GB free disk space
+  - Administrative privileges for installation
 
-### Python Package Management
-- Poetry (Python package manager)
-  ```bash
-  # Install Poetry
-  python -m pip install poetry
-  
-  # Configure Poetry to create virtualenvs in project directory
-  poetry config virtualenvs.in-project true
-  ```
+### Required Software
+- Python 3.10+ (64-bit)
+- Git
+- Windows PowerShell or Command Prompt with administrative privileges
+
+## Installation Guide
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/ai-hedge-fund.git
+cd ai-hedge-fund
+```
+
+### 2. Installation Methods
+
+#### Option A: Automated Installation (Recommended)
+Run the installation script with administrative privileges:
+```bash
+cd scripts
+install.bat
+```
+
+#### Option B: Manual Installation
+1. Create a virtual environment:
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
+
+### Installation Checks
+The installation script performs the following checks:
+- Verifies administrative privileges
+- Checks Python installation and version
+- Creates a virtual environment
+- Installs core dependencies
+- Sets up data science packages
+- Configures API and AI packages
+
+### Troubleshooting
+- Ensure you have administrative rights
+- Verify Python 3.10+ is installed and in PATH
+- Check `pip_install.log` and `install_script.log` for detailed error messages
+
+### Post-Installation Setup
+1. Copy `.env.example` to `.env`
+2. Fill in required API keys:
+   - OpenAI API Key
+   - Alpaca Trading API Keys
+   - Other necessary credentials
+
+## Verification
+After installation, you can verify the setup by running:
+```bash
+python src/agents.py --check-setup
+```
+
+## Common Issues
+- **Python Not Found**: Ensure Python 3.10+ is installed and added to PATH
+- **Dependency Conflicts**: Use the provided `requirements.txt`
+- **Permission Errors**: Run installation script as Administrator
 
 ## Development Setup
 
